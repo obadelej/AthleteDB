@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AthleteDB_Data", "AthleteDB_Data\AthleteDB_Data.sqlproj", "{E5158930-5AF6-422E-9BEF-E4B3BE30DF5B}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AthleteDBData", "AthleteDB_Data\AthleteDBData.sqlproj", "{E5158930-5AF6-422E-9BEF-E4B3BE30DF5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AthleteDBUI", "AthleteDBUI\AthleteDBUI.csproj", "{51B75966-2CC9-4AF6-8E53-C39C874082BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{E5158930-5AF6-422E-9BEF-E4B3BE30DF5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5158930-5AF6-422E-9BEF-E4B3BE30DF5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E5158930-5AF6-422E-9BEF-E4B3BE30DF5B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{51B75966-2CC9-4AF6-8E53-C39C874082BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B75966-2CC9-4AF6-8E53-C39C874082BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B75966-2CC9-4AF6-8E53-C39C874082BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B75966-2CC9-4AF6-8E53-C39C874082BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
