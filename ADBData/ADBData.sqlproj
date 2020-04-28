@@ -4,20 +4,20 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>AthleteDBData</Name>
+    <Name>ADBData</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{e5158930-5af6-422e-9bef-e4b3be30df5b}</ProjectGuid>
+    <ProjectGuid>{2ce023fe-7ff5-42c7-b225-b6fc787a1247}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>AthleteDB_Data</RootNamespace>
-    <AssemblyName>AthleteDB_Data</AssemblyName>
+    <RootNamespace>ADBData</RootNamespace>
+    <AssemblyName>ADBData</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -60,20 +60,54 @@
     <Folder Include="dbo" />
     <Folder Include="dbo\Stored Procedures" />
     <Folder Include="dbo\Tables" />
-    <Folder Include="PublishedLocations" />
     <Folder Include="dbo\Views" />
+    <Folder Include="PublishedLocations" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PublishedLocations\AthleteDBData.publish.xml" />
+    <None Include="PublishedLocations\ADBData.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\Person.sql" />
     <Build Include="dbo\Tables\Address.sql" />
     <Build Include="dbo\Tables\Event.sql" />
-    <Build Include="dbo\Tables\School.sql" />
     <Build Include="dbo\Tables\PB.sql" />
+    <Build Include="dbo\Tables\Person.sql" />
+    <Build Include="dbo\Tables\Athlete.sql" />
+    <Build Include="dbo\Stored Procedures\spEvent_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spEvent_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spEvent_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\spEvent_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spEvent_Update.sql" />
+    <Build Include="dbo\Tables\Parent.sql" />
+    <Build Include="dbo\Tables\Coach.sql" />
+    <Build Include="dbo\Stored Procedures\spParent_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spParent_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spParent_Update.sql" />
+    <Build Include="dbo\Stored Procedures\spParent_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spParent_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\spCoach_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spCoach_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spCoach_Update.sql" />
+    <Build Include="dbo\Stored Procedures\spCoach_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spCoach_GetById.sql" />
+    <Build Include="dbo\Tables\Meet.sql" />
+    <Build Include="dbo\Stored Procedures\spMeet_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spMeet_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spMeet_Update.sql" />
+    <Build Include="dbo\Stored Procedures\spMeet_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spMeet_GetById.sql" />
+    <Build Include="dbo\Tables\School.sql" />
+    <Build Include="dbo\Stored Procedures\spSchool_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spSchool_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spSchool_Update.sql" />
+    <Build Include="dbo\Stored Procedures\spSchool_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spSchool_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\spAddress_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spAddress_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spAddress_Update.sql" />
+    <Build Include="dbo\Stored Procedures\spAddress_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spAddress_GetById.sql" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="AthleteDBData.refactorlog" />
+    <RefactorLog Include="ADBData.refactorlog" />
   </ItemGroup>
 </Project>
