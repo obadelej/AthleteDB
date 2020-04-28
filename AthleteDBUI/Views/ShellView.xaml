@@ -5,8 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AthleteDBUI.Views"
         mc:Ignorable="d"
-        Title="ShellView" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        WindowStartupLocation="CenterScreen"
+        Title="Athlete Database" Height="730" Width="900">
+    <DockPanel Background='White'>
+        <Menu DockPanel.Dock="Top" FontSize="18">
+            <MenuItem Header='File' >
+                <MenuItem x:Name='ExitApplication'
+									Header='Exit' />
+            </MenuItem>
+            <MenuItem Header='Data'>
+                <MenuItem Header='Events'
+									x:Name='EventView'/>
+                <MenuItem Header='Parents'
+									x:Name='ParentView' />
+                <MenuItem Header='Coaches'
+									x:Name='CoachView' />
+                
+                <MenuItem Header='Meets'
+									x:Name='MeetView'/>
+                <MenuItem Header='School'
+									x:Name='SchoolView'/>
+                <MenuItem Header='Address'
+									x:Name='AddressView'/>
+                <MenuItem Header='Athletes'
+									x:Name='AthleteView' />
+                <MenuItem Header='Results'
+									x:Name='ResultView' />
+                
+            </MenuItem>
+
+            <MenuItem Header='Athlete Information' >
+                
+            </MenuItem>
+            
+            <MenuItem Header='Help'
+								x:Name='Help'>
+                <MenuItem Header='Content'
+									x:Name='ContentView' />
+                <Separator />
+                <MenuItem Header='About'
+									x:Name='AboutView' />
+            </MenuItem>
+        </Menu>
+
+        <Grid Background='White'>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width='25*' />
+                <ColumnDefinition Width='767*' />
+            </Grid.ColumnDefinitions>
+            <ContentControl x:Name='ActiveItem'
+											Background='White'
+											Margin='20 5 20 20'
+											Grid.ColumnSpan='2'>
+
+            </ContentControl>
+
+
+
+        </Grid>
+
+    </DockPanel>
 </Window>
