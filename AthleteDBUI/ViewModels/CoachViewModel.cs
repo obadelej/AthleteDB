@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using AthleteDBUI.EventModels;
 
 namespace AthleteDBUI.ViewModels
 {
@@ -23,14 +24,15 @@ namespace AthleteDBUI.ViewModels
         private BindingList<CoachDisplayModel> _coaches;
         private CoachDisplayModel _selectedCoach;
         private string msg;
+        IEventAggregator _events;
 
         #endregion
         #region CONSTRUCTORS
 
-        public CoachViewModel()
+        public CoachViewModel(IEventAggregator events)
         {
             Coaches = new BindingList<CoachDisplayModel>(GetAllCoaches());
-
+            _events = events;
         }
 
         #endregion
@@ -212,6 +214,8 @@ namespace AthleteDBUI.ViewModels
                 Coaches = new BindingList<CoachDisplayModel>(GetAllCoaches());
                 NotifyOfPropertyChange(() => Coaches);
                 Clear();
+
+                _events.PublishOnUIThread(new CoachChangedEvent());
             }
             else
             {
@@ -250,6 +254,8 @@ namespace AthleteDBUI.ViewModels
 
 
                     isUpdating = false;
+
+                    _events.PublishOnUIThread(new CoachChangedEvent());
                 }
 
             }
@@ -277,6 +283,8 @@ namespace AthleteDBUI.ViewModels
                 Coaches = new BindingList<CoachDisplayModel>(GetAllCoaches());
                 SelectedCoach = null;
                 Clear();
+
+                _events.PublishOnUIThread(new CoachChangedEvent());
             }
         }
 

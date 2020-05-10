@@ -69,11 +69,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Enums\Gender.cs" />
+    <Compile Include="EventModels\AddressChangedEvent.cs" />
+    <Compile Include="EventModels\CoachChangedEvent.cs" />
+    <Compile Include="EventModels\ParentChangedEvent.cs" />
+    <Compile Include="EventModels\SchoolChangedEvent.cs" />
     <Compile Include="Models\AddressDisplayModel.cs" />
     <Compile Include="Models\AthleteDisplayModel.cs" />
     <Compile Include="Models\CoachDisplayModel.cs" />
     <Compile Include="Models\MeetDisplayModel.cs" />
     <Compile Include="Models\ParentDisplayModel.cs" />
+    <Compile Include="Models\ResultDisplayModel.cs" />
     <Compile Include="Models\SchoolDisplayModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
     <Compile Include="ViewModels\AthleteViewModel.cs" />
@@ -81,6 +87,7 @@
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\MeetViewModel.cs" />
     <Compile Include="ViewModels\ParentViewModel.cs" />
+    <Compile Include="ViewModels\ResultViewModel.cs" />
     <Compile Include="ViewModels\SchoolViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\AddressView.xaml.cs">
@@ -100,6 +107,9 @@
     </Compile>
     <Compile Include="Views\ParentView.xaml.cs">
       <DependentUpon>ParentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ResultView.xaml.cs">
+      <DependentUpon>ResultView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SchoolView.xaml.cs">
       <DependentUpon>SchoolView.xaml</DependentUpon>
@@ -136,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ParentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResultView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -177,12 +191,17 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AthleteDBUI.Library\AthleteDBUI.Library.csproj">
       <Project>{ce48b62b-1a92-44c6-bc6b-638a500a74ea}</Project>
       <Name>AthleteDBUI.Library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TextInfo\ValidationExamples.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

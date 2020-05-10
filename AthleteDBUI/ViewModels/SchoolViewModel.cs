@@ -1,4 +1,5 @@
-﻿using AthleteDBUI.Library.DataAccess;
+﻿using AthleteDBUI.EventModels;
+using AthleteDBUI.Library.DataAccess;
 using AthleteDBUI.Library.Models;
 using AthleteDBUI.Models;
 using Caliburn.Micro;
@@ -26,14 +27,15 @@ namespace AthleteDBUI.ViewModels
         private BindingList<SchoolDisplayModel> _schools;
         private SchoolDisplayModel _selectedSchool;
         private string msg;
+        IEventAggregator _events;
 
         #endregion
         #region CONSTRUCTORS
 
-        public SchoolViewModel()
+        public SchoolViewModel(IEventAggregator events)
         {
             Schools = new BindingList<SchoolDisplayModel>(GetAllSchools());
-
+            _events = events;
         }
 
         #endregion
@@ -215,6 +217,8 @@ namespace AthleteDBUI.ViewModels
                 Schools = new BindingList<SchoolDisplayModel>(GetAllSchools());
                 NotifyOfPropertyChange(() => Schools);
                 Clear();
+
+                _events.PublishOnUIThread(new SchoolChangedEvent());
             }
             else
             {
@@ -253,6 +257,8 @@ namespace AthleteDBUI.ViewModels
 
 
                     isUpdating = false;
+
+                    _events.PublishOnUIThread(new SchoolChangedEvent());
                 }
 
             }
@@ -280,6 +286,8 @@ namespace AthleteDBUI.ViewModels
                 Schools = new BindingList<SchoolDisplayModel>(GetAllSchools());
                 SelectedSchool = null;
                 Clear();
+
+                _events.PublishOnUIThread(new SchoolChangedEvent());
             }
         }
 

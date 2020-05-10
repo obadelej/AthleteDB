@@ -1,4 +1,5 @@
-﻿using AthleteDBUI.Library.DataAccess;
+﻿using AthleteDBUI.EventModels;
+using AthleteDBUI.Library.DataAccess;
 using AthleteDBUI.Library.Models;
 using AthleteDBUI.Models;
 using Caliburn.Micro;
@@ -24,13 +25,15 @@ namespace AthleteDBUI.ViewModels
         private BindingList<AddressDisplayModel> _addresses;
         private AddressDisplayModel _selectedAddress;
         private string msg;
+        IEventAggregator _events;
 
         #endregion
         #region CONSTRUCTORS
 
-        public AddressViewModel()
+        public AddressViewModel(IEventAggregator events)
         {
             Addresses = new BindingList<AddressDisplayModel>(GetAllAddresses());
+            _events = events;
 
         }
 
@@ -225,6 +228,8 @@ namespace AthleteDBUI.ViewModels
                 Addresses = new BindingList<AddressDisplayModel>(GetAllAddresses());
                 NotifyOfPropertyChange(() => Addresses);
                 Clear();
+
+                _events.PublishOnUIThread(new AddressChangedEvent());
             }
             else
             {
@@ -263,6 +268,8 @@ namespace AthleteDBUI.ViewModels
 
 
                     isUpdating = false;
+
+                    _events.PublishOnUIThread(new AddressChangedEvent());
                 }
 
             }
@@ -290,6 +297,8 @@ namespace AthleteDBUI.ViewModels
                 Addresses = new BindingList<AddressDisplayModel>(GetAllAddresses());
                 SelectedAddress = null;
                 Clear();
+
+                _events.PublishOnUIThread(new AddressChangedEvent());
             }
         }
 

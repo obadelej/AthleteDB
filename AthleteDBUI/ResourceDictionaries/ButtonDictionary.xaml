@@ -58,7 +58,7 @@
 
 	<!-- TextBox -->
 	<Style TargetType='TextBox'>
-		<Setter Property='FontSize' Value='14'/>
+		<Setter Property='FontSize' Value='12'/>
 		<Setter Property='Margin' Value='2' />
 		<Setter Property='Padding' Value='5 0' />
 		<Setter Property='Height' Value='35' />
@@ -155,7 +155,7 @@
 						Value='1'/>
 		<Setter Property='BorderBrush' Value='Gainsboro' />
 		<Setter Property='Background' Value='GhostWhite' />
-		<Setter Property='Margin' Value='3'/>		
+		<Setter Property='Margin' Value='2'/>		
 	</Style>
 	
 	

@@ -70,7 +70,6 @@
     <Build Include="dbo\Tables\Address.sql" />
     <Build Include="dbo\Tables\Event.sql" />
     <Build Include="dbo\Tables\PB.sql" />
-    <Build Include="dbo\Tables\Person.sql" />
     <Build Include="dbo\Tables\Athlete.sql" />
     <Build Include="dbo\Stored Procedures\spEvent_Delete.sql" />
     <Build Include="dbo\Stored Procedures\spEvent_GetAll.sql" />
@@ -106,6 +105,17 @@
     <Build Include="dbo\Stored Procedures\spAddress_Update.sql" />
     <Build Include="dbo\Stored Procedures\spAddress_Delete.sql" />
     <Build Include="dbo\Stored Procedures\spAddress_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\spAthlete_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spAthlete_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spAthlete_Update.sql" />
+    <Build Include="dbo\Stored Procedures\spAthlete_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spAthlete_GetById.sql" />
+    <Build Include="dbo\Tables\Result.sql" />
+    <Build Include="dbo\Stored Procedures\spResult_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spResult_Update.sql" />
+    <Build Include="dbo\Stored Procedures\spResult_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spResult_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\spResult_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="ADBData.refactorlog" />

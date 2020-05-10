@@ -1,4 +1,5 @@
-﻿using AthleteDBUI.Library.DataAccess;
+﻿using AthleteDBUI.EventModels;
+using AthleteDBUI.Library.DataAccess;
 using AthleteDBUI.Library.Models;
 using AthleteDBUI.Models;
 using Caliburn.Micro;
@@ -23,13 +24,15 @@ namespace AthleteDBUI.ViewModels
         private BindingList<ParentDisplayModel> _parents;
         private ParentDisplayModel _selectedParent;
         private string msg;
+        IEventAggregator _events;
 
         #endregion
         #region CONSTRUCTORS
 
-        public ParentViewModel()
+        public ParentViewModel(IEventAggregator events)
         {
             Parents = new BindingList<ParentDisplayModel>(GetAllParents());
+            _events = events;
 
         }
 
@@ -118,7 +121,6 @@ namespace AthleteDBUI.ViewModels
                 return output;
             }
         }
-
 
 
         public bool CanDelete
@@ -214,12 +216,14 @@ namespace AthleteDBUI.ViewModels
                 _parents = new BindingList<ParentDisplayModel>(GetAllParents());
                 NotifyOfPropertyChange(() => Parents);
                 Clear();
+
+                _events.PublishOnUIThread(new ParentChangedEvent());
             }
             else
             {
                 msg = $"Error: An Event named ({SelectedParent.FullName}) already exist!!!";
                 MessageBox.Show(msg, "Error");
-            }
+            }            
 
             isAdding = false;
         }
@@ -249,12 +253,13 @@ namespace AthleteDBUI.ViewModels
                     MessageBox.Show(msg, "Parent Updated");
                     Parents = new BindingList<ParentDisplayModel>(GetAllParents());
                     Clear();
-
-
+                    
                     isUpdating = false;
                 }
 
             }
+
+            _events.PublishOnUIThread(new ParentChangedEvent());
         }
 
         public void UpdateFields()
@@ -279,6 +284,7 @@ namespace AthleteDBUI.ViewModels
                 Parents = new BindingList<ParentDisplayModel>(GetAllParents());
                 SelectedParent = null;
                 Clear();
+                _events.PublishOnUIThread(new ParentChangedEvent());
             }
         }
 

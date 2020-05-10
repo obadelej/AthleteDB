@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AthleteDBUI.Views"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Athlete Database" Height="730" Width="900">
+        Title="Athlete Database" Height="740" Width="900">
     <DockPanel Background='White'>
         <Menu DockPanel.Dock="Top" FontSize="18">
             <MenuItem Header='File' >
@@ -53,11 +53,10 @@
                 <ColumnDefinition Width='25*' />
                 <ColumnDefinition Width='767*' />
             </Grid.ColumnDefinitions>
-            <ContentControl x:Name='ActiveItem'
-											Background='White'
-											Margin='20 5 20 20'
-											Grid.ColumnSpan='2'>
-
+            <ContentControl x:Name='ActiveItem'											
+                            Background='White'											
+                            Margin='20 5 20 20'											
+                            Grid.ColumnSpan='2'>
             </ContentControl>
 
 

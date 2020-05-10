@@ -1,0 +1,597 @@
+﻿Data validation in WPF
+Posted: August 26, 2013 | Filed under: WPF |26 Comments
+A common requirement for any user interface application that accepts user input is to validate the entered information to ensure that it has the expected format and type for the back-end to be able to accept and persist it. This post is about how data validation works in WPF and the different validation options there are available including implementing custom ValidationRules and using the IDataErrorInfo interface and the INotifyErrorDataError interface that was introduced in the .NET Framework 4.5. It also contains an example that shows how you can validate data using data annotations.
+
+Data binding
+In a typical WPF application that uses the MVVM (Model-View-View Model) design pattern, a dependency property of a user interface control in a XAML-defined view uses data binding to bind to some data returned by a CLR property of the view model. If the binding is setup correctly and the view model implements the System.ComponentModel.INotifyPropertyChanged interface to provide notifications when the data changes, the changes are automatically reflected in the elements in the view that are bound to it. Correspondingly, an underlying data value in the view model is automatically updated when the user modifies the bound value in the view.
+
+Provided that the view model has a property called “Name”, you bind it to a TextBox’s Text property in XAML the following way:
+
+<TextBox Text="{Binding Path=Name}"/>
+<!-- equivalent to <TextBox Text="{Binding Name}"/> -->
+Source
+Besides the path that specifies the name of the property to bind to, the binding must also have a source object. If you don’t specify a source explicitly by setting the Source property of the binding, it will inherit the DataContext from its parent element to use as its source. In a MVVM WPF application, the view model acts as the window’s DataContext:
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        this.DataContext = new ViewModel();
+    }
+}
+This means that that all controls inside the window will inherit its DataContext unless some parent element of a control overrides this by setting its own DataContext property. Besides inheriting and setting the DataContext property on an element directly you can also specify a binding source using the ElementName property, used when you want to bind to some other element, or the RelativeSource property. The latter can for example be very useful for bindings in Styles and ControlTemplates and when you want to bind to some property in a parent element.
+
+Mode
+The Mode property of the System.Windows.Data.Binding class lets you control the direction of the data flow, i.e. whether the binding should update only the user interface control, the source property of the DataContext or both, as defined by the System.Windows.Data.BindingMode enumeration:
+
+OneWay: Only the value of the dependency property of the UI element is updated when the source property changes. Used in read-only scenarios.
+TwoWay: Both the property of the UI element and the source property are updated whenever the value of either of them changes. Often used for interactive controls such as the TextBox.
+OneTime: Only the property of the UI element is updated and it is only updated when the application starts or when the DataContext undergoes a change. Used when the data to be displayed is truly static.
+OneWayToSource: Only the source property is updated when the property of the UI element is changed. The reverse of OneWay.
+The enumeration also has a Default option which returns the default binding mode of the UI element’s dependency property. For a TextBox’s Text property the default mode is TwoWay but it varies for each dependency property.
+
+UpdateSourceTrigger
+For TwoWay and OneWayToSource bindings there is an additional property on the Binding class named UpdateSourceTrigger that specifies what triggers the update of a source property. If the UpdateSourceTrigger is set to LostFocus, which is the default for the Text property of the TextBox control, the text you type into the TextBox does not update the source property until the control loses focus which happens when you click away from it. If you require the source to get updated, i.e. the setter for the bound property of the DataContext to get called, as the user is typing into the TextBox you set the UpdateSourceTrigger property to PropertyChanged:
+
+<TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+Besides a Default option that works similar to the one in the BindingMode enumeration, there is also an option called Explicit defined in the System.Windows.Data.Binding.UpdateSourceTrigger enumeration. Setting the property to this value means that the value of the source property only gets updated when you explicitly call the BindingExpression.UpdateSource() method in code. You will typically never use this approach in an MVVM application though.
+
+Data type conversion
+If you want to bind a view model property of a specific type to a dependency property in the view of a different type you may need to implement a custom converter class by implementing the System.Windows.Data.IValueConverter interface and setting the Converter property of the binding to an instance of this. A converter class converts data from one type to another during binding by implementing the Convert and ConvertBack methods of the mentioned interface. Once you have created a converter class you will typically add it as a resource in XAML with a unique x:Key attribute and then reference it from the binding as a StaticResource:
+
+<Window x:Class="WpfDataValidation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MyApplication"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <local:MyCustomConverter x:Key="myCustomConverter"/>
+    </Window.Resources>
+    <Grid>
+        <TextBox Text="{Binding Name, Converter={StaticResource myCustomConverter}}"/>
+    </Grid>
+</Window>
+However, when binding some data of a different type than System.String (string) to a dependency property of type string you don’t necessarily need to use a converter as the default conversion will automatically apply the ToString() method on the value of the source property.
+
+This means that you don’t have to use a converter to display a System.Int32 (int) value in a TextBox:
+
+public class ViewModel
+{
+    public ViewModel()
+    {
+        /* Set default age */
+        this.Age = 30;
+    }
+ 
+    public int Age { get; set; }
+}
+<TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}"/>
+Data validation
+If a user enters an invalid value that cannot be converted to an int and be set as the value for the Age property in the view model in the above example, a validation error will occur and a visual feedback will be provided to the user to indicate this. By default you will see a red border around the UI element when this happens, e.g. if you are typing a letter into a TextBox bound to a source property of type int:
+
+Default Validation.ErrorTemplate
+The actual message that is describing the error is stored in the ErrorContent property of a System.Windows.Controls.ValidationError object that is added to the Validation.Errors collection of the bound element by the binding engine at runtime. When the attached property Validation.Errors has ValidationError objects in it, another attached property named Validation.HasError returns true.
+
+ErrorTemplate
+To be able to see the error messages in the view you can replace the default control template that draws the red border around the element with your own custom template by setting the Validation.ErrorTemplate attached property of the control:
+
+<TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}">
+    <Validation.ErrorTemplate>
+        <ControlTemplate>
+            <StackPanel>
+                <!-- Placeholder for the TextBox itself -->
+                <AdornedElementPlaceholder x:Name="textBox"/>
+                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+            </StackPanel>
+        </ControlTemplate>
+    </Validation.ErrorTemplate>
+</TextBox>
+Note that the Validation.ErrorTemplate will be displayed on the adorner layer. Elements in the adorner layer are rendered on top of the rest of the visual elements and they will not be considered when the layout system is measuring and arranging the controls on the adorned element layer. The adorned element in this case is the TextBox control itself and you include an AdornedElementPlaceholder in the control template where you want to leave space for it. The template above will cause the error message to be displayed in a TextBlock below the TextBox. Note that the TextBlock will appear on top of any elements that are located right below the TextBox as adorners are always visually on top.
+
+Validation.ErrorTemplate
+
+ValidationRule
+Now that you can see the actual error message, which reads “Value … could not be converted” when the conversion of the string value to an int fails, you may want to customize it. You can do this by implementing a custom validation rule and associate this with the Binding object. A custom validation rule is a class that derives from the abstract System.Windows.Controls.ValidationRule class and implements its Validate method. It has a property named ValidationStep that controls when the binding engine will execute the Validate method. The System.Windows.Controls.ValidationStep enumeration has the following options:
+
+RawProposedValue: The validation rule is run before the value conversion occurs. This is the default for a custom implementation.
+ConvertedProposedValue: The validation rule is run after the value is converted but before the setter of the source property is called.
+UpdatedValue: The validation rule is run after the source property has been updated.
+CommittedValue: The validation rule is run after the value has been committed to the source.
+Below is how you could implement a custom validation rule that checks whether the string value can be converted to an integer value and sets the ErrorContent property of the ValidationError object in the Validation.Errors collection if not. Note that the ValidationStep property needs to be set to RawProposedValue, either explicitly or implictly by using the default value, for the rule to be applied before the default conversion occurs.
+
+public class StringToIntValidationRule : ValidationRule
+{
+    public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+    {
+        int i;
+        if(int.TryParse(value.ToString(), out i))
+            return new ValidationResult(true, null);
+  
+        return new ValidationResult(false, "Please enter a valid integer value.");
+    }
+}
+<Window x:Class="WpfDataValidation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WpfDataValidation"
+        Title="MainWindow" Height="175" Width="400">
+    <StackPanel Margin="50">
+        <TextBox>
+            <TextBox.Text>
+                <Binding Path="Age" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <local:StringToIntValidationRule ValidationStep="RawProposedValue"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+     ...
+        </TextBox>
+    </StackPanel>
+</Window>
+Validation process
+If the Validate method of a ValidationRule object returns an invalid ValidationResult, the binding engine’s validation procedure listed below will halt. If the returned object’s IsValid property is set true, the validation process continues to the next step.
+
+The Validate method of all custom ValidationRule objects that are associated with the binding and has the ValidationStep property set to RawProposedValue is executed until one of them returns an invalid ValidationResult or until all of them pass.
+If the binding has a converter, its ConvertBack method gets called.
+The binding engine tries to convert the value returned from the converter’s ConvertBack method, assuming there is a converter associated with binding, or the value of the dependency property to the type of the source property.
+The setter of the source property is called.
+The Validate method of the binding’s all ValidationRule objects with the ValidationStep property set to UpdatedValue are evaluated the same way as in the first step.
+The same as the previous step for all ValidationRule objects with the ValidationStep property set to CommittedValue
+Before the Validate method is executed for a ValidationRule object at any given step, any errors that were added to the Validation.Errors attached property of the bound element during that step in a previous validation procedure are removed. The Validation.Errors collection is also cleared when a valid value transfer occurs.
+
+ExceptionValidationRule
+WPF ships with two built-in concrete implementations of the ValidationRule class. The System.Windows.Controls.ExceptionValidationRule class adds a ValidationError object to the Validation.Errors collection when an exception is thrown in the setter of the source property. For example, it would be useful if the Age property of the view model was constrained to only accept values between 10 and 100 and threw an exception if the value was outside of this range:
+
+private int _age;
+public int Age
+{
+    get { return _age; }
+    set
+    {
+        if (value < 10 || value > 100)
+            throw new ArgumentException("The age must be between 10 and 100");
+         _age = value; 
+    }
+}
+<TextBox>
+    <TextBox.Text>
+        <Binding Path="Age" UpdateSourceTrigger="PropertyChanged">
+            <Binding.ValidationRules>
+                <ExceptionValidationRule />
+            </Binding.ValidationRules>
+        </Binding>
+    </TextBox.Text>
+</TextBox>
+An alternative syntax to explicitly add this rule to the binding’s ValidationRules collection is to set the ValidatesOnExceptions property to true:
+
+<TextBox Text="{Binding Path=Age, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
+IDataErrorInfo
+The other built-in validation rule is the System.Windows.Controls.DataErrorValidationRule class. It checks for validation errors that are raised by the source object’s, i.e. the view model’s, implementation of the System.ComponentModel.IDataErrorInfo interface. This interface defines two properties that returns a string indicating what is wrong with the object and some property of the object respectively. Below is how the view model would implement the IDataErrorInfo interface to validate the Age property according to the same rules as above but without throwing any exception:
+
+public class ViewModel : System.ComponentModel.IDataErrorInfo
+{
+    public ViewModel()
+    {
+        /* Set default age */
+        this.Age = 30;
+    }
+ 
+    public int Age { get; set; }
+ 
+    public string Error
+    {
+        get { return null; }
+    }
+ 
+    public string this[string columnName]
+    {
+        get
+        {
+            switch (columnName)
+            {
+                case "Age":
+                    if (this.Age < 10 || this.Age > 100)
+                        return "The age must be between 10 and 100";
+                    break;
+            }
+ 
+            return string.Empty;
+        }
+    }
+}
+WPF automatically identifies source objects that implement this interface to provide a way to display custom error information in a view. Just remember to associate the DataErrorValidationRule with the binding in view, either by adding it to the binding’s ValidationRules collection or by setting the ValidatesOnDataErrors property of the binding to true:
+
+<TextBox Text="{Binding Path=Age, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+INotifyDataErrorInfo
+The .NET Framework 4.5 introduced a new System.ComponentModel.INotifyDataErrorInfo interface – the same interface has been present in Silverlight since version 4 – which enables you to perform server-side validations asynchronously and then notify the view by raising an ErrorsChanged event once the validations are completed. Similarly, it makes it possible to invalidate a property when setting another property and it also supports setting multiple errors per property and custom error objects of some other type than System.String (string).
+
+/* The built-in System.ComponentModel.INotifyDataErrorInfo interface */
+public interface INotifyDataErrorInfo
+{
+    bool HasErrors { get; }
+    event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+    IEnumerable GetErrors(string propertyName);
+}
+Multiple errors per property
+The GetErrors method of the interface returns an IEnumerable that contains validation errors for the specified property or for the entire entity. You should always raise the ErrorsChanged event whenever the collection returned by the GetErrors method changes. If the source of a two-way binding implements the INotifyDataErrorInfo interface and the ValidatesOnNotifyDataErrors property of the binding is set to true (which it is by default), the WPF 4.5 binding engine automatically monitors the ErrorsChanged event and calls the GetErrors method to retrieve the updated errors once the event is raised from the source object provided that the HasErrors property returns true.
+
+Below is an example of a simple service with a single method that validates a username by first querying a database to determine whether it is already in use or not and then checks the length of it and finally determines whether it contains any illegal characters by using a regular expression. The method returns true or false depending on whether the validation succeeded or not and it also returns a collection of error messages as an out parameter. Declaring an argument as out is useful when you want the method to return multiple values.
+
+public interface IService
+{
+    bool ValidateUsername(string username, out ICollection<string> validationErrors);
+}
+ 
+public class Service : IService
+{
+    public bool ValidateUsername(string username, out ICollection<string> validationErrors)
+    {
+        validationErrors = new List<string>();
+        int count = 0;
+        using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings[0].ConnectionString))
+        {
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM [Users] WHERE Username = @Username", conn);
+            cmd.Parameters.Add("@Username", SqlDbType.VarChar);
+            cmd.Parameters["@Username"].Value = username;
+            conn.Open();
+            count = (int)cmd.ExecuteScalar();
+        }
+ 
+        if (count > 0)
+            validationErrors.Add("The supplied username is already in use. Please choose another one.");
+ 
+        /* Verifying that length of username */
+        if (username.Length > 10 || username.Length < 4)
+            validationErrors.Add("The username must be between 4 and 10 characters long.");
+ 
+        /* Verifying that the username contains only letters */
+        if (!Regex.IsMatch(username, @"^[a-zA-Z]+$"))
+            validationErrors.Add("The username must only contain letters (a-z, A-Z).");
+ 
+        return validationErrors.Count == 0;
+    }
+}
+Asynchronous validation
+The following view model implementation of the INotifyDataErrorInfo interface then uses this service to perform the validation asynchronously. Besides a reference to the service itself, it has a System.Collections.Generic.Dictionary<string, System.Collections.Generic.ICollection<string>> where the key represents a name of a property and the value represents a collection of validation errors for the corresponding property.
+
+public class ViewModel : INotifyDataErrorInfo
+{
+    private readonly IService _service;
+    private readonly Dictionary<string, ICollection<string>>
+        _validationErrors = new Dictionary<string, ICollection<string>>();
+ 
+    public ViewModel(IService service)
+    {
+        _service = service;
+    }
+ 
+    ...
+ 
+    #region INotifyDataErrorInfo members
+    public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+    private void RaiseErrorsChanged(string propertyName)
+    {
+        if (ErrorsChanged != null)
+            ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+    }
+ 
+    public System.Collections.IEnumerable GetErrors(string propertyName)
+    {
+        if (string.IsNullOrEmpty(propertyName)
+            || !_validationErrors.ContainsKey(propertyName))
+            return null;
+ 
+        return _validationErrors[propertyName];
+    }
+ 
+    public bool HasErrors
+    {
+        get { return _validationErrors.Count > 0; }
+    }
+    #endregion
+}
+The setter of a Username property of the view model is then using a private method to call the service method asynchronously using the async and await keywords – these were added to introduce a simplified approach to asynchronous programming in the .NET Framework 4.5 and the Windows Runtime (WinRT) – and update the dictionary based on the result of the validation:
+
+private string _username;
+public string Username 
+{
+    get { return _username; }
+    set
+    { 
+        _username = value;
+        ValidateUsername(_username);
+    }
+}
+ 
+private async void ValidateUsername(string username)
+{
+    const string propertyKey = "Username";
+    ICollection<string> validationErrors = null;
+    /* Call service asynchronously */
+    bool isValid = await Task<bool>.Run(() => 
+    { 
+        return _service.ValidateUsername(username, out validationErrors); 
+    })
+    .ConfigureAwait(false);
+ 
+    if (!isValid)
+    {
+        /* Update the collection in the dictionary returned by the GetErrors method */
+        _validationErrors[propertyKey] = validationErrors;
+        /* Raise event to tell WPF to execute the GetErrors method */
+        RaiseErrorsChanged(propertyKey);
+    }
+    else if(_validationErrors.ContainsKey(propertyKey))
+    {
+        /* Remove all errors for this property */
+        _validationErrors.Remove(propertyKey);
+        /* Raise event to tell WPF to execute the GetErrors method */
+        RaiseErrorsChanged(propertyKey);
+    }
+}
+For the view to be able show more than a single error message you have to make some changes to the Validation.ErrorTemplate of the data bound control. You typically use an ItemsControl present a collection of items in XAML:
+
+<TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}">
+    <Validation.ErrorTemplate>
+        <ControlTemplate>
+            <StackPanel>
+                <!-- Placeholder for the TextBox itself -->
+                <AdornedElementPlaceholder x:Name="textBox"/>
+                <ItemsControl ItemsSource="{Binding}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ControlTemplate>
+    </Validation.ErrorTemplate>
+</TextBox>
+Validation.ErrorTemplate
+
+Custom error objects
+As mentioned, you can also return error objects of a any type from the GetErrors method and this can be very useful when you want to present custom error reporting in the view. Consider the following sample type that has a string property that describes the validation error and an additional property of enumeration type that specifies the severity of the error:
+
+public class CustomErrorType
+{
+    public CustomErrorType(string validationMessage, Severity severity)
+    {
+        this.ValidationMessage = validationMessage;
+        this.Severity = severity;
+    }
+ 
+    public string ValidationMessage { get; private set; }
+    public Severity Severity { get; private set; }
+}
+ 
+public enum Severity
+{
+    WARNING,
+    ERROR
+}
+ 
+public class Service : IService
+{
+    /* The service method modifed to return objects of type CustomErrorType instead of System.String */
+    public bool ValidateUsername(string username, out ICollection<CustomErrorType> validationErrors)
+    {
+        validationErrors = new List<CustomErrorType>();
+        int count = 0;
+        /* query database as before */
+    ...
+        if (count > 0)
+            validationErrors.Add(new CustomErrorType("The supplied username is already in use. Please choose another one.", Severity.ERROR));
+ 
+        /* Verifying that length of username */
+        if (username.Length > 10 || username.Length < 4)
+            validationErrors.Add(new CustomErrorType("The username should be between 4 and 10 characters long.", Severity.WARNING));
+ 
+        /* Verifying that the username contains only letters */
+        if (!Regex.IsMatch(username, @"^[a-zA-Z]+$"))
+            validationErrors.Add(new CustomErrorType("The username must only contain letters (a-z, A-Z).", Severity.ERROR));
+ 
+        return validationErrors.Count == 0;
+    }
+}
+If you use the same ErrorTemplate as shown before to present validation errors of the above type, you will see the ToString() representation of it when an error has been detected. You can choose to override the ToString() method to return an error message or simply adjust the template to fit the custom type. Below is for example how you could change the colour of a validation error based on the Severity property of the CustomErrorType object returned by the ErrorContent property of a ValidationError object in the Validation.Errors collection:
+
+<Validation.ErrorTemplate>
+    <ControlTemplate xmlns:local="clr-namespace:WpfApplication1">
+        <StackPanel>
+            <!-- Placeholder for the TextBox itself -->
+            <AdornedElementPlaceholder x:Name="textBox"/>
+            <ItemsControl ItemsSource="{Binding}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ErrorContent.ValidationMessage}">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Foreground" Value="Red"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ErrorContent.Severity}"
+                                                                 Value="{x:Static local:Severity.WARNING}">
+                                            <Setter Property="Foreground" Value="Orange"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ControlTemplate>
+</Validation.ErrorTemplate>
+Validation.ErrorTemplate
+
+Cross-property errors
+As the GetErrors method returns a collection of validation errors for a given property, you can easily perform cross-property validation – in cases where a change to a property value may cause an error in another property – by adding appropriate errors to the dictionary, or whatever collection you are using to store the validation error objects, and then tell the binding engine to re-call this method by raising the ErrorsChanged event.
+
+In the below sample code, the Interest property is only mandatory when the Type property has a certain value and the validation of the Interest property occurs whenever either of the properties are set.
+
+public class ViewModel : INotifyDataErrorInfo
+{
+    private readonly Dictionary<string, ICollection<string>>
+        _validationErrors = new Dictionary<string, ICollection<string>>();
+ 
+    private Int16 _type;
+    public Int16 Type
+    {
+        get { return _type; }
+        set
+        {
+            _type = value;
+            ValidateInterestRate();
+        }
+    }
+ 
+    private decimal? _interestRate;
+    public decimal? InterestRate
+    {
+        get { return _interestRate; }
+        set
+        {
+            _interestRate = value;
+            ValidateInterestRate();
+        }
+    }
+ 
+    private const string dictionaryKey = "InterestRate";
+    private const string validationMessage = "You must enter an interest rate.";
+    private void ValidateInterestRate()
+    {
+        /* The InterestRate property must have a value only if the Type property is set to 1 */
+        if (_type.Equals(1) && !_interestRate.HasValue)
+        {
+            if (_validationErrors.ContainsKey(dictionaryKey))
+                _validationErrors[dictionaryKey].Add(validationMessage);
+            else
+                _validationErrors[dictionaryKey] = new List<string> { validationMessage };
+            RaiseErrorsChanged("InterestRate");
+        }
+        else if (_validationErrors.ContainsKey(dictionaryKey))
+        {
+            _validationErrors.Remove(dictionaryKey);
+            RaiseErrorsChanged("InterestRate");
+        }
+    }
+ 
+    #region INotifyDataErrorInfo members
+    ...
+    #endregion
+}
+While the IDataErrorInfo interface that has been around since .NET 3.5 basically only provides the capability to return a string that specifies what is wrong with a single given property, the new INotifyDataErrorInfo interface gives you a lot more flexibility and should in general be used when implementing new classes.
+
+Data annotations
+In ASP.NET MVC the default model binder supports validation of properties using DataAnnotations attributes. DataAnnotations refers to a set of attributes in the System.ComponentModel.DataAnnotations namespace (defined in the System.ComponentModel.DataAnnotations.dll) that you can apply to a class or its members to specify validation rules, how data is displayed and relationships between classes. It basically enables you to move the validation logic from the controller to the model (or the model binder) which effectively makes it easier to write unit tests for the the controller actions.
+
+In WPF you have to perform this kind of validation manually yourself and there is a System.ComponentModel.DataAnnotations.Validator static class that can be used for this. It exposes some overloaded methods that enable you to validate an entire object or a single property of an object.
+
+Below is a sample model class with two properties that are decorated with DataAnnotations attributes. You’ll find the list of available built-in attributes on MSDN here and you can also define your one by creating a class that inherits from the abstract System.ComponentModel.DataAnnotations.ValidationAttribute class.
+
+public class Model
+{
+    [Required(ErrorMessage = "You must enter a username.")]
+    [StringLength(10, MinimumLength = 4,
+        ErrorMessage = "The username must be between 4 and 10 characters long")]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "The username must only contain letters (a-z, A-Z).")]
+    public string Username { get; set; }
+ 
+    [Required(ErrorMessage = "You must enter a name.")]
+    public string Name { get; set; }
+}
+The below view model then implements the previously mentioned INotifyDataErrorInfo interface and uses the TryValidateProperty method of the Validator class to execute the validation rules specified by the data annotations in the model class. The overload of the method used here takes an instance of the object to validate, a System.ComponentModel.DataAnnotations.ValidationContext object that describes the context in which the validation check is performed, a collection to hold the description for each failed validation and a Boolean value to specify whether to validate all properties. Note that the sample implementation below provides methods for validating a single property and the entire model object.
+
+public class ViewModel : INotifyDataErrorInfo
+{
+    private readonly Dictionary<string, ICollection<string>>
+       _validationErrors = new Dictionary<string, ICollection<string>>();
+    private readonly Model _user = new Model();
+ 
+    public string Username
+    {
+        get { return _user.Username; }
+        set
+        {
+            _user.Username = value;
+            ValidateModelProperty(value, "Username");
+        }
+    }
+ 
+    public string Name
+    {
+        get { return _user.Name; }
+        set
+        {
+            _user.Name = value;
+            ValidateModelProperty(value, "Name");
+        }
+    }
+ 
+    protected void ValidateModelProperty(object value, string propertyName)
+    {
+        if (_validationErrors.ContainsKey(propertyName))
+            _validationErrors.Remove(propertyName);
+ 
+        ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+        ValidationContext validationContext =
+            new ValidationContext(_user, null, null) { MemberName = propertyName };
+        if (!Validator.TryValidateProperty(value, validationContext, validationResults))
+        {
+            _validationErrors.Add(propertyName, new List<string>());
+            foreach (ValidationResult validationResult in validationResults)
+            {
+                _validationErrors[propertyName].Add(validationResult.ErrorMessage);
+            }
+        }
+        RaiseErrorsChanged(propertyName);
+    }
+ 
+    /* Alternative solution using LINQ */
+    protected void ValidateModelProperty_(object value, string propertyName)
+    {
+        if (_validationErrors.ContainsKey(propertyName))
+            _validationErrors.Remove(propertyName);
+ 
+        PropertyInfo propertyInfo = _user.GetType().GetProperty(propertyName);
+        IList<string> validationErrors =
+              (from validationAttribute in propertyInfo.GetCustomAttributes(true).OfType<ValidationAttribute>()
+               where !validationAttribute.IsValid(value)
+               select validationAttribute.FormatErrorMessage(string.Empty))
+               .ToList();
+ 
+        _validationErrors.Add(propertyName, validationErrors);
+        RaiseErrorsChanged(propertyName);
+    }
+ 
+    protected void ValidateModel()
+    {
+        _validationErrors.Clear();
+        ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+        ValidationContext validationContext = new ValidationContext(_user, null, null);
+        if (!Validator.TryValidateObject(_user, validationContext, validationResults, true))
+        {
+            foreach (ValidationResult validationResult in validationResults)
+            {
+                string property = validationResult.MemberNames.ElementAt(0);
+                if (_validationErrors.ContainsKey(property))
+                {
+                    _validationErrors[property].Add(validationResult.ErrorMessage);
+                }
+                else
+                {
+                    _validationErrors.Add(property, new List<string> { validationResult.ErrorMessage });
+                }
+            }
+        }
+ 
+        /* Raise the ErrorsChanged for all properties explicitly */
+        RaiseErrorsChanged("Username");
+        RaiseErrorsChanged("Name");
+    }
+ 
+    #region INotifyDataErrorInfo members
+    /* Same implementation as above */
+    #endregion

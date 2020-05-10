@@ -4,9 +4,264 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AthleteDBUI.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             mc:Ignorable="d" Background='White' FontSize='12'
+             d:DesignHeight="740" d:DesignWidth="900">
+
+    <StackPanel Orientation='Vertical'
+							Style='{StaticResource MainStackPanel}'>
+        <Border>
+            <StackPanel >
+                <TextBlock Text='Athletes Page'
+								 Style='{StaticResource HeaderText}'
+								 HorizontalAlignment='Center'					 
+								 FontWeight='Bold' />
+            </StackPanel>
+        </Border>
+
+
+        <StackPanel Orientation='Horizontal'
+								Style='{StaticResource MainStackPanel}'>
+            <Border>
+                <StackPanel>
+                    <!-- Grid -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width='10' />
+                            <ColumnDefinition Width='auto' />
+                            <ColumnDefinition Width='auto' />
+                            <ColumnDefinition Width='auto' />
+                            <ColumnDefinition Width='auto' />
+                            <ColumnDefinition Width='auto' />
+                            <ColumnDefinition Width='auto' />
+                            <ColumnDefinition Width='*' />
+                            <ColumnDefinition Width='10' />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height='10' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='auto' />
+                            <RowDefinition Height='*' />
+                            <RowDefinition Height='10' />
+                        </Grid.RowDefinitions>
+
+                        <!-- Row 1-->
+                        <TextBlock Text='First Name:'
+												 Grid.Row='1'
+												 Grid.Column='1'
+												 Style='{StaticResource LabelText}'
+												  />
+                        <TextBox x:Name='FirstName'
+											 Grid.Row='1'
+											 Grid.Column='2'
+											 MinWidth='200'
+											 />
+
+                        <!-- Row 2-->
+                        <TextBlock Text='Last Name:'
+												 Grid.Row='2'
+												 Grid.Column='1'
+												 Style='{StaticResource LabelText}'/>
+                        <TextBox x:Name='LastName'
+											 Grid.Row='2'
+											 Grid.Column='2'
+											 MinWidth='200'
+											 />
+
+                        <!-- Row 3 -->
+                        <TextBlock Text='Gender:'
+												Grid.Row='3'
+												Grid.Column='1'
+												Style='{StaticResource LabelText}'/>
+                        <CheckBox x:Name="IsMale"
+                                  Content="Male"
+                                  VerticalContentAlignment ="Center"
+                                  FontSize="16"
+                                  Grid.Row="3"
+                                  Grid.Column="2" />
+
+                        <!--<ComboBox Grid.Row='3'
+                                  Grid.Column='2'                                           
+                                  SelectedValue="{Binding Gender, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedGender}"                             
+                                  ItemsSource="{Binding GenderTypes}"
+											 />-->
+
+                        
+
+                        <!-- Row 4 -->
+                        <TextBlock Text='Birth Date:'
+												 Grid.Row='4'
+												 Grid.Column='1'
+												Style='{StaticResource LabelText}' />
+                        <DatePicker x:Name='BirthDate'
+													MinWidth='250'
+													Grid.Row='4'
+													Grid.Column='2'													
+													DisplayDate='{Binding DateTime.Now}'
+													 />
+                        <!-- Row 5 -->
+                        <TextBlock Text='Phone:'
+												 Grid.Row='5'
+												 Grid.Column='1'
+												 Style='{StaticResource LabelText}'/>
+                        <TextBox x:Name='Phone'
+											 Grid.Row='5'
+											 Grid.Column='2'
+											 MinWidth='200'
+											 />
+                        <!-- Row 6 -->
+                        <TextBlock Text='Email:'
+												 Grid.Row='6'
+												 Grid.Column='1'
+												 Style='{StaticResource LabelText}' />
+                        <TextBox x:Name='Email'
+											 Grid.Row='6'
+											 Grid.Column='2'											 
+											 MinWidth='250'
+											 />
+
+                        <!-- Row 7 -->
+                        <TextBlock Text="Address:"
+                                   Grid.Row="7"
+                                   Grid.Column="1"
+                                   Style="{StaticResource LabelText}" />
+                        
+
+                        <ComboBox ItemsSource="{Binding Path=Addresses}"                                  
+                                  SelectedItem="{Binding Path=SelectedAddress}"
+                                  DisplayMemberPath="FullAddress" 
+                                  Grid.Row='7'
+                                  Grid.Column='2'/>
+
+
+                        <!-- Row 8 -->
+                        <TextBlock Text="Parent:"
+                                   Grid.Row="8"
+                                   Grid.Column="1"
+                                   Style="{StaticResource LabelText}" />
+                        
+                        <ComboBox ItemsSource="{Binding Path=Parents}" 
+                                  SelectedItem="{Binding Path=SelectedParent}"
+                                  DisplayMemberPath="FullName" 
+                                  Grid.Row='8'
+                                  Grid.Column='2'/>
+
+                        
+
+                        <!-- Row 9 -->
+                        <TextBlock Text="School:"
+                                   Grid.Row="9"
+                                   Grid.Column="1"
+                                   Style="{StaticResource LabelText}" />
+
+                        <ComboBox ItemsSource="{Binding Path=Schools}"
+                                  SelectedItem="{Binding Path=SelectedSchool}"
+                                  DisplayMemberPath="SchoolName" 
+                                  Grid.Row='9'
+                                  Grid.Column='2'/>
+
+                        <!-- Row 10 -->
+                        <TextBlock Text="Coach:"
+                                   Grid.Row="10"
+                                   Grid.Column="1"
+                                   Style="{StaticResource LabelText}" />
+
+                        <ComboBox ItemsSource="{Binding Path=Coaches}"
+                                  SelectedItem="{Binding Path=SelectedCoach}"
+                                  DisplayMemberPath="FullName"                                   
+                                  Grid.Row='10'
+                                  Grid.Column='2'/>
+                        
+                        <!--<ComboBox x:Name='Coaches'
+											Grid.Row='10'
+											Grid.Column='2'
+											DisplayMemberPath='FullName'
+											SelectedValuePath='Id'
+											SelectedValue='{Binding Id}'
+											SelectedItem='SelectedCoach' />-->
+
+                        <!-- Row 11 -->
+                        <StackPanel 
+							Grid.Row='11'  
+							Grid.Column='1'
+							Grid.ColumnSpan='2'
+							Orientation='Horizontal'>
+
+                            <Button x:Name='Clear'
+												Grid.Row='11'
+												Grid.Column='1'
+												Content='Clear'
+												>
+                            </Button>
+                            <Button x:Name='Update'
+												Grid.Row='11'
+												Grid.Column='2'
+												Content='Update'
+												/>
+
+                            <Button x:Name='Add'
+												Grid.Row='7'
+												Grid.Column='3'
+												Content='Add'
+												/>
+
+                        </StackPanel>
+
+                    </Grid>
+                    <StackPanel Orientation="Horizontal"
+											HorizontalAlignment="Center">
+                        <Button Content="Import Athletes"
+										x:Name="ImportAthletes" />
+                        <Button Content="Export Athletes"
+										x:Name="ExportAthletes" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+
+            <Border>
+                <StackPanel>
+                    <TextBlock Text='List of Athletes'
+										 Style='{StaticResource H2Text}' />
+                    <ListBox x:Name='Athletes'
+									 MinHeight='400'
+									 MaxHeight='400'
+									 MinWidth='200'										 
+									 SelectedItem='SelectedAthlete'>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text='{Binding FullName}'
+													 />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button x:Name='Delete'
+									Content='Delete Athlete'
+									 />
+                </StackPanel>
+
+            </Border>
+
+        </StackPanel>
+        <Border>
+            <StackPanel>
+                <Button x:Name='Close'
+								Content='Close'								
+								MaxWidth='200' />
+            </StackPanel>
+        </Border>
+
+
+    </StackPanel>
 </UserControl>

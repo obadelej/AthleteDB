@@ -3,39 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AthleteDBUI.EventModels;
 using Caliburn.Micro;
 
 namespace AthleteDBUI.ViewModels
 {
-    public class ShellViewModel : Conductor<object>
+    public class ShellViewModel : Conductor<object>, 
+        IHandle<ParentChangedEvent>, 
+        IHandle<AddressChangedEvent>, 
+        IHandle<CoachChangedEvent>,
+        IHandle<SchoolChangedEvent>
     {
-        //private AthletesViewModel _athletesVM;
-        //private TestViewModel _testVM;
-        // private TestResultsViewModel _testResultsVM;
-        // private PredictionsViewModel _predictionsVM;
+
+        #region PRIVATE BACKING FIELDS
+        IEventAggregator _events;
         private ParentViewModel _parentVM;
         private EventViewModel _eventVM;
         private CoachViewModel _coachVM;
         private MeetViewModel _meetVM;
         private SchoolViewModel _schoolVM;
         private AddressViewModel _addressVM;
-        //private MeetViewModel _meetVM;
-        //private MeetResultsViewModel _meetResultsVM;
-        //private TestPBViewModel _testPBVM;
-        //private ChartViewModel _chartVM;
-        //private AboutViewModel _aboutVM;
+        private AthleteViewModel _athleteVM;
+        private ResultViewModel _resultVM;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         public ShellViewModel(
-            //AboutViewModel aboutVM,
-            //TestPBViewModel testPBVM,
-            //MeetViewModel meetVM,
-            //ChartViewModel chartVM,
-            //AthletesViewModel athletesVM,
-
-            //TestViewModel testVM,
-            //MeetResultsViewModel meetResultsVM,
-            //TestResultsViewModel testResultsVM,
-            //PredictionsViewModel predictionsVM
+            IEventAggregator events,
+            ResultViewModel resultVM,
+            AthleteViewModel athleteVM,
             AddressViewModel addressVM,
             SchoolViewModel schoolVM,
             MeetViewModel meetVM,
@@ -44,48 +42,29 @@ namespace AthleteDBUI.ViewModels
             EventViewModel eventVM)
         
         {
-            //_athletesVM = athletesVM;
-            _parentVM = parentVM;
+            _events = events;           
+
+            _parentVM = parentVM;            
             _eventVM = eventVM;
             _coachVM = coachVM;
             _meetVM = meetVM;
             _schoolVM = schoolVM;
             _addressVM = addressVM;
-            //_testVM = testVM;
-            //_meetResultsVM = meetResultsVM;
-            //_testResultsVM = testResultsVM;
-            //_predictionsVM = predictionsVM;
-            //_meetVM = meetVM;
-            //_chartVM = chartVM;
-            //_testPBVM = testPBVM;
-            //_aboutVM = aboutVM;
-            //ActivateItem(_athletesVM);
+            _athleteVM = athleteVM;
+            _resultVM = resultVM;
+
+            _events.Subscribe(this);
+
         }
+
+        #endregion
+
+        #region PUBLIC METHODS
 
         public void ExitApplication()
         {
             this.TryClose();
-        }
-
-        public void AthletesView()
-        {
-            //ActivateItem(_athletesVM);
-        }
-
-        public void TestsView()
-        {
-            //ActivateItem(_testVM);
-        }
-
-        public void TestResultsView()
-        {
-            //ActivateItem(_testResultsVM);
-        }
-
-        public void PredictionsView()
-        {
-            //ActivateItem(_predictionsVM);
-        }
+        }        
 
         public void EventView()
         {
@@ -104,6 +83,7 @@ namespace AthleteDBUI.ViewModels
 
         public void MeetView()
         {
+
             ActivateItem(_meetVM);
         }
 
@@ -117,24 +97,47 @@ namespace AthleteDBUI.ViewModels
             ActivateItem(_addressVM);
         }
 
-        public void MeetResultsView()
-        {
-            //ActivateItem(_meetResultsVM);
-        }
+        public void AthleteView()
+        {            
+            ActivateItem(_athleteVM);
+        }       
 
-        public void TestPBView()
+        public void ResultView()
         {
-            //ActivateItem(_testPBVM);
-        }
-
-        public void ChartView()
-        {
-            //ActivateItem(_chartVM);
+            ActivateItem(_resultVM);
         }
 
         public void AboutView()
         {
             //ActivateItem(_aboutVM);
         }
+
+        #endregion
+
+
+        #region EVENT HANDLERS
+
+        public void Handle(ParentChangedEvent message)
+        {
+            _athleteVM = new AthleteViewModel();
+        }
+
+        public void Handle(AddressChangedEvent message)
+        {
+            _athleteVM = new AthleteViewModel();
+        }
+
+        public void Handle(CoachChangedEvent message)
+        {
+            _athleteVM = new AthleteViewModel();
+        }
+            
+
+        public void Handle(SchoolChangedEvent message)
+        {
+            _athleteVM = new AthleteViewModel();
+        }
+
+        #endregion
     }
 }
