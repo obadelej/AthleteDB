@@ -12,7 +12,8 @@ namespace AthleteDBUI.ViewModels
         IHandle<ParentChangedEvent>, 
         IHandle<AddressChangedEvent>, 
         IHandle<CoachChangedEvent>,
-        IHandle<SchoolChangedEvent>
+        IHandle<SchoolChangedEvent>,
+        IHandle<MeetChangedEvent>
     {
 
         #region PRIVATE BACKING FIELDS
@@ -25,6 +26,7 @@ namespace AthleteDBUI.ViewModels
         private AddressViewModel _addressVM;
         private AthleteViewModel _athleteVM;
         private ResultViewModel _resultVM;
+        private ProfileViewModel _profileVM;
 
         #endregion
 
@@ -39,6 +41,7 @@ namespace AthleteDBUI.ViewModels
             MeetViewModel meetVM,
             ParentViewModel parentVM,
             CoachViewModel coachVM,
+            ProfileViewModel profileVM,
             EventViewModel eventVM)
         
         {
@@ -52,6 +55,7 @@ namespace AthleteDBUI.ViewModels
             _addressVM = addressVM;
             _athleteVM = athleteVM;
             _resultVM = resultVM;
+            _profileVM = profileVM;
 
             _events.Subscribe(this);
 
@@ -107,6 +111,11 @@ namespace AthleteDBUI.ViewModels
             ActivateItem(_resultVM);
         }
 
+        public void ProfileView()
+        {
+            ActivateItem(_profileVM);
+        }
+
         public void AboutView()
         {
             //ActivateItem(_aboutVM);
@@ -136,6 +145,11 @@ namespace AthleteDBUI.ViewModels
         public void Handle(SchoolChangedEvent message)
         {
             _athleteVM = new AthleteViewModel();
+        }
+
+        public void Handle(MeetChangedEvent message)
+        {
+            _resultVM = new ResultViewModel();
         }
 
         #endregion

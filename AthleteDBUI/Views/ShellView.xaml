@@ -13,7 +13,7 @@
                 <MenuItem x:Name='ExitApplication'
 									Header='Exit' />
             </MenuItem>
-            <MenuItem Header='Data'>
+            <MenuItem Header='Data Entry'>
                 <MenuItem Header='Events'
 									x:Name='EventView'/>
                 <MenuItem Header='Parents'
@@ -34,7 +34,8 @@
                 
             </MenuItem>
 
-            <MenuItem Header='Athlete Information' >
+            <MenuItem Header='View Profile'
+                      x:Name="ProfileView">
                 
             </MenuItem>
             

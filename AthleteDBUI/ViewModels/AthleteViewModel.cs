@@ -477,55 +477,7 @@ namespace AthleteDBUI.ViewModels
                 Phone = SelectedAthlete.Phone;
                 Email = SelectedAthlete.Email;
                 IsMale = SelectedAthlete.IsMale;
-
-                
-                
-                //if (SelectedParent == null)
-                //{
-                //    SelectedParent = Parents.Where(x => x.Id == SelectedAthlete.ParentId).FirstOrDefault();
-                    
-                    
-                //}
-
-                //if (SelectedAddress == null)
-                //{
-                //    SelectedAddress = Addresses.Where(x => x.Id == SelectedAthlete.AddressId).FirstOrDefault();
-                //}
-
-                //if (SelectedSchool == null)
-                //{
-                //    SelectedSchool = Schools.Where(x => x.Id == SelectedAthlete.SchoolId).FirstOrDefault();
-                //}
-
-                //if (SelectedCoach == null)
-                //{
-                //    SelectedCoach = Coaches.Where(x => x.Id == SelectedAthlete.CoachId).FirstOrDefault();
-                //}
-
-
             }
-
-
-            //if (SelectedAddress == null)
-            //{
-            //    SelectedAddress = Addresses.Where(x => x.Id == SelectedAthlete.AddressId).FirstOrDefault();
-            //}
-
-            //if (SelectedParent == null)
-            //{
-            //    SelectedParent = Parents.Where(x => x.Id == SelectedAthlete.ParentId).FirstOrDefault();
-            //}
-
-            //if (SelectedSchool == null)
-            //{
-            //    SelectedSchool = Schools.Where(x => x.Id == SelectedAthlete.SchoolId).FirstOrDefault();
-            //}
-
-            //if (SelectedCoach == null)
-            //{
-            //    SelectedCoach = Coaches.Where(x => x.Id == SelectedAthlete.CoachId).FirstOrDefault();
-            //}
-
         }
 
         

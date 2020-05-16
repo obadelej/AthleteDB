@@ -1,4 +1,5 @@
-﻿using AthleteDBUI.Library.DataAccess;
+﻿using AthleteDBUI.EventModels;
+using AthleteDBUI.Library.DataAccess;
 using AthleteDBUI.Library.Models;
 using AthleteDBUI.Models;
 using Caliburn.Micro;
@@ -26,13 +27,15 @@ namespace AthleteDBUI.ViewModels
         private BindingList<MeetDisplayModel> _meets;
         private MeetDisplayModel _selectedMeet;
         private string msg;
+        IEventAggregator _events;
 
         #endregion
         #region CONSTRUCTORS
 
-        public MeetViewModel()
+        public MeetViewModel(IEventAggregator events)
         {
             Meets = new BindingList<MeetDisplayModel>(GetAllMeets());
+            _events = events;
 
         }
 
@@ -220,6 +223,8 @@ namespace AthleteDBUI.ViewModels
             }
 
             isAdding = false;
+
+            _events.PublishOnUIThread(new MeetChangedEvent());
         }
 
         public void Update()
@@ -250,6 +255,8 @@ namespace AthleteDBUI.ViewModels
 
 
                     isUpdating = false;
+
+                    _events.PublishOnUIThread(new MeetChangedEvent());
                 }
 
             }
@@ -277,6 +284,8 @@ namespace AthleteDBUI.ViewModels
                 Meets = new BindingList<MeetDisplayModel>(GetAllMeets());
                 SelectedMeet = null;
                 Clear();
+
+                _events.PublishOnUIThread(new MeetChangedEvent());
             }
         }
 

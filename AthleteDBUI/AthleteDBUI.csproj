@@ -69,14 +69,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Converters\StringToIntConverter.cs" />
     <Compile Include="Enums\Gender.cs" />
     <Compile Include="EventModels\AddressChangedEvent.cs" />
     <Compile Include="EventModels\CoachChangedEvent.cs" />
+    <Compile Include="EventModels\MeetChangedEvent.cs" />
     <Compile Include="EventModels\ParentChangedEvent.cs" />
     <Compile Include="EventModels\SchoolChangedEvent.cs" />
     <Compile Include="Models\AddressDisplayModel.cs" />
     <Compile Include="Models\AthleteDisplayModel.cs" />
     <Compile Include="Models\CoachDisplayModel.cs" />
+    <Compile Include="Models\EventDisplayModel.cs" />
     <Compile Include="Models\MeetDisplayModel.cs" />
     <Compile Include="Models\ParentDisplayModel.cs" />
     <Compile Include="Models\ResultDisplayModel.cs" />
@@ -87,6 +90,7 @@
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\MeetViewModel.cs" />
     <Compile Include="ViewModels\ParentViewModel.cs" />
+    <Compile Include="ViewModels\ProfileViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
     <Compile Include="ViewModels\SchoolViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -107,6 +111,9 @@
     </Compile>
     <Compile Include="Views\ParentView.xaml.cs">
       <DependentUpon>ParentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProfileView.xaml.cs">
+      <DependentUpon>ProfileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ResultView.xaml.cs">
       <DependentUpon>ResultView.xaml</DependentUpon>
@@ -146,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ParentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProfileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

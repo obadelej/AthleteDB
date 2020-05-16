@@ -61,7 +61,7 @@
 												 Style='{StaticResource LabelText}'
 												  />
                         <ComboBox ItemsSource="{Binding Athletes}"
-                                  SelectedItem="{Binding SelectedAthlete}"
+                                  SelectedItem="{Binding SelectedAthlete}"                                  
                                   DisplayMemberPath="FullName"
                                   Grid.Row='1'
                                   Grid.Column='2'
@@ -87,7 +87,7 @@
                                    Grid.Row='3'
                                    Grid.Column='1'
                                    Style='{StaticResource LabelText}'/>
-                        <ComboBox ItemsSource="{Binding Events}"
+                        <ComboBox ItemsSource="{Binding EventList}"
                                   SelectedItem="{Binding SelectedEvent}"
                                   DisplayMemberPath="EventName"
                                   Grid.Row="3"
@@ -98,18 +98,18 @@
 												 Grid.Row='4'
 												 Grid.Column='1'
 												 Style='{StaticResource LabelText}'/>
-                        <TextBox x:Name='Mark'
-											 Grid.Row='4'
-											 Grid.Column='2'
-											 MinWidth='200'
+                        <TextBox Text="{Binding Path=Mark, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                                 
+                                 Grid.Row='4'
+								 Grid.Column='2'			 
+                                 MinWidth='200'
 											 />
 
                         <!-- Row 5 -->
-                        <TextBlock Text='Birth Date:'
+                        <TextBlock Text='Date:'
 												 Grid.Row='5'
 												 Grid.Column='1'
 												Style='{StaticResource LabelText}' />
-                        <DatePicker x:Name='BirthDate'
+                        <DatePicker x:Name='PerfDate'
 													MinWidth='250'
 													Grid.Row='5'
 													Grid.Column='2'													
@@ -153,14 +153,24 @@
                                 <ListBox x:Name='Results'
 									 MinHeight='100'									 
 									 MinWidth='400'										 
-									 SelectedItem='SelectedAthlete'>
+									 SelectedItem='SelectedResult'>
 
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                           <StackPanel>
-                                              <TextBlock Text='{Binding FullName}'
-													 />
-                                           </StackPanel>
+                                           <StackPanel Orientation="Horizontal">                                               
+                                               <TextBlock Text='{Binding FullName}'
+                                                          Margin="10 5 10 5"/>
+                                               <TextBlock Text='{Binding MeetName}' 
+                                                          Margin="10 5 10 5"/>
+                                               <TextBlock Text='{Binding EventName}' 
+                                                          Margin="10 5 10 5"/>
+                                               <TextBlock Text='{Binding Mark}' 
+                                                          Margin="10 5 10 5"/>
+                                               <TextBlock Text='{Binding PerfDate, StringFormat=d}' 
+                                                          Margin="10 5 10 5"/>
+                                               
+
+                                                </StackPanel>
                                          </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
@@ -175,10 +185,10 @@
                     </Grid>
                     <StackPanel Orientation="Horizontal"
 											HorizontalAlignment="Center">
-                        <Button Content="Import Athletes"
-										x:Name="ImportAthletes" />
-                        <Button Content="Export Athletes"
-										x:Name="ExportAthletes" />
+                        <Button Content="Import Results"
+										x:Name="ImportResults" />
+                        <Button Content="Export Results"
+										x:Name="ExportResults" />
                     </StackPanel>
                 </StackPanel>
             </Border>
