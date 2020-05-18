@@ -69,10 +69,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Converters\FloatToStringConverter.cs" />
     <Compile Include="Converters\StringToIntConverter.cs" />
+    <Compile Include="Converters\TimeConverter.cs" />
     <Compile Include="Enums\Gender.cs" />
     <Compile Include="EventModels\AddressChangedEvent.cs" />
     <Compile Include="EventModels\CoachChangedEvent.cs" />
+    <Compile Include="EventModels\EventChangedEvent.cs" />
     <Compile Include="EventModels\MeetChangedEvent.cs" />
     <Compile Include="EventModels\ParentChangedEvent.cs" />
     <Compile Include="EventModels\SchoolChangedEvent.cs" />

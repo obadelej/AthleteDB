@@ -4,10 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AthleteDBUI.Views"
+             xmlns:cv="clr-namespace:AthleteDBUI.Converters"
              mc:Ignorable="d" 
              Background="white"
              FontSize="14"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="900">
+    <UserControl.Resources>
+        <cv:FloatToStringConverter x:Key="FloatToString"/>
+    </UserControl.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
     <StackPanel>
         <Border>
             <StackPanel Style="{StaticResource MainStackPanel}">
@@ -57,7 +63,9 @@
         </Border>
         <StackPanel Orientation="Horizontal">
             <StackPanel>
+                <!-- Athlete Personal Info-->
                 <StackPanel>
+                    <Border>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10"/>
@@ -75,21 +83,342 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                            <TextBlock Text="Athlete Personal Info"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource H2Text}"/>
+
+                            <TextBlock Text="First Name: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="2"
+                                   Grid.Column="1"/>
+                        <TextBlock Text="{Binding Path=SelectedAthlete.FirstName}"
+                                   Grid.Row="2"
+                                   Grid.Column="2"/>
+                        <TextBlock Text="Last Name: "
+                                   Style="{StaticResource LabelText}"
+                                   Grid.Row="3"
+                                   Grid.Column="1"/>
+                        <TextBlock Text="{Binding Path=SelectedAthlete.LastName}"
+                                   Grid.Row="3"
+                                   Grid.Column="2"/>
+                        <TextBlock Text="Birth Date: "
+                                   Style="{StaticResource LabelText}"
+                                   Grid.Row="4"
+                                   Grid.Column="1"/>
+                        <TextBlock Text="{Binding Path=SelectedAthlete.BirthDate, StringFormat=d}"
+                                   Grid.Row="4"
+                                   Grid.Column="2"/>
+                        <TextBlock Text="Age: "
+                                   Style="{StaticResource LabelText}"
+                                   Grid.Row="5"
+                                   Grid.Column="1"/>
+                        <TextBlock Text="{Binding Path=SelectedAthlete.Age}"
+                                   Grid.Row="5"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Male: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="6"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedAthlete.IsMale}"
+                                   Grid.Row="6"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Phone: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="7"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedAthlete.Phone}"
+                                   Grid.Row="7"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Email: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="8"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedAthlete.Email}"
+                                   Grid.Row="8"
+                                   Grid.Column="2"/>
+
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <!-- Athlete Address Info -->
+                <StackPanel>
+                    <Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                             <RowDefinition Height="10"/>
                         </Grid.RowDefinitions>
+                            <TextBlock Text="Athlete Address Info"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource H2Text}"/>
 
-                        <TextBlock Text="First Name: "
-                                   Grid.Row="1"
+                            <TextBlock Text="Street1: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="2"
                                    Grid.Column="1"/>
-                        <TextBlock Text="{Binding Path=SelectedAthlete_FirstName}"/>
-
-                    </Grid>
-                </StackPanel>
-                <StackPanel></StackPanel>                
+                            <TextBlock Text="{Binding Path=SelectedAddress.Street1}"
+                                   Grid.Row="2"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Street2: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="3"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedAddress.Street2}"
+                                   Grid.Row="3"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Town: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="4"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedAddress.Town}"
+                                   Grid.Row="4"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Parish: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="5"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedAddress.Parish}"
+                                   Grid.Row="5"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Country: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="6"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedAddress.Country}"
+                                   Grid.Row="6"
+                                   Grid.Column="2"/>
+                            
+                        </Grid>
+                    </Border>
+                </StackPanel>                
             </StackPanel>
             <StackPanel>
-                <StackPanel></StackPanel>
-                <StackPanel></StackPanel>
+                <!-- Athlete Parent Info -->
+                <StackPanel>
+                    <Border>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="10"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Parent Info"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource H2Text}"/>
+
+                            <TextBlock Text="First Name: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="2"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedParent.FirstName}"
+                                   Grid.Row="2"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Last Name: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="3"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedParent.LastName}"
+                                   Grid.Row="3"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Phone: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="4"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedParent.Phone}"
+                                   Grid.Row="4"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Email: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="5"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedParent.Email}"
+                                   Grid.Row="5"
+                                   Grid.Column="2"/>
+
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <!-- Athlete School Info -->
+                <StackPanel>
+                    <Border>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="10"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="School Info"
+                                       Grid.Row="1"                                       
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource H2Text}"/>
+
+                            <TextBlock Text="School Name: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="2"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedSchool.SchoolName}"
+                                   Grid.Row="2"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Location: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="3"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedSchool.Location}"
+                                   Grid.Row="3"
+                                   Grid.Column="2"/>
+                            <TextBlock Text="Phone: "
+                                       Style="{StaticResource LabelText}"
+                                   Grid.Row="4"
+                                   Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=SelectedSchool.Phone}"
+                                   Grid.Row="4"
+                                   Grid.Column="2"/>
+                            
+
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <!-- Athlete PB info -->
+                <StackPanel>
+                    <Border>
+                        <StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Athlete Events and Personal Bests"
+                                       Style="{StaticResource H2Text}"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="5"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="20 0 0 0">
+                                    <TextBlock Text="Event"
+                                               Style="{StaticResource LabelText}"
+                                       MinWidth="70"
+                                       Grid.Column="1"
+                                       Grid.Row="2"/>
+                                    <TextBlock Text="Mark"
+                                               Style="{StaticResource LabelText}"
+                                               MinWidth="70"
+                                       Grid.Column="2"
+                                       Grid.Row="2"/>
+                                    <TextBlock Text="Wind"
+                                               Style="{StaticResource LabelText}"
+                                               MinWidth="70"
+                                       Grid.Column="3"
+                                       Grid.Row="2"/>
+                                    <TextBlock Text="Date"
+                                               Style="{StaticResource LabelText}"
+                                               MinWidth="70"
+                                       Grid.Column="4"
+                                       Grid.Row="2"/>
+                                    <TextBlock Text="Location"
+                                               Style="{StaticResource LabelText}"
+                                               MinWidth="100"
+                                       Grid.Column="5"
+                                       Grid.Row="2"/>
+                                    <TextBlock Text="Meet"
+                                               Style="{StaticResource LabelText}"
+                                               MinWidth="100"
+                                       Grid.Column="6"
+                                       Grid.Row="2"/>
+
+                                    
+
+                                </StackPanel>
+                                <StackPanel>
+                                    <ListBox                                     
+                                     x:Name="SelectedAthletePBs"
+                                     >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding EventName}"
+                                                       x:Name="EventName"    
+                                                       MinWidth="70"/>
+                                                    <TextBlock Text="{Binding Mark, 
+                                                        Converter={StaticResource ResourceKey=FloatToString},
+                                                        ConverterParameter={x:Reference EventName}}"
+                                                       MinWidth="70"/>
+                                                    <TextBlock Text="{Binding Wind}"
+                                                       MinWidth="70"/>
+                                                    <TextBlock Text="{Binding PerfDate, StringFormat=d}"
+                                                       MinWidth="70"/>
+                                                    <TextBlock Text="{Binding Location}"
+                                                       MinWidth="100"/>
+                                                    <TextBlock Text="{Binding MeetName}"
+                                                       MinWidth="100"/>
+
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+
+                                    </ListBox>
+                                </StackPanel>
+                            
+                        
+
+                            
+                            
+                            
+                       
+                            </StackPanel>
+                        </Border>
+                </StackPanel>
                 
             </StackPanel>
         </StackPanel>
@@ -97,4 +426,5 @@
             
         </StackPanel>
     </StackPanel>
+    </ScrollViewer>
 </UserControl>

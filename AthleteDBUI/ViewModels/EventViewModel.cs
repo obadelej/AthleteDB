@@ -1,4 +1,5 @@
-﻿using AthleteDBUI.Library.DataAccess;
+﻿using AthleteDBUI.EventModels;
+using AthleteDBUI.Library.DataAccess;
 using AthleteDBUI.Library.Models;
 using Caliburn.Micro;
 using System;
@@ -24,13 +25,15 @@ namespace AthleteDBUI.ViewModels
         private EventModel _selectedEvent;
         private string msg;
 
+        IEventAggregator _eventsNotifier;
+
         #endregion
         #region CONSTRUCTORS
 
-        public EventViewModel()
+        public EventViewModel(IEventAggregator eventsNotifier)
         {
             _events = new BindingList<EventModel>(GetAllEvents());
-
+            _eventsNotifier = eventsNotifier;
         }
 
         #endregion
@@ -188,6 +191,8 @@ namespace AthleteDBUI.ViewModels
                 _events = new BindingList<EventModel>(GetAllEvents());
                 NotifyOfPropertyChange(() => Events);
                 Clear();
+
+                _eventsNotifier.PublishOnUIThread(new EventChangedEvent());
             }
             else
             {
@@ -224,6 +229,7 @@ namespace AthleteDBUI.ViewModels
 
 
                     isUpdating = false;
+                    _eventsNotifier.PublishOnUIThread(new EventChangedEvent());
                 }
 
             }
@@ -249,6 +255,8 @@ namespace AthleteDBUI.ViewModels
                 Events = new BindingList<EventModel>(GetAllEvents());
                 SelectedEvent = null;
                 Clear();
+
+                _eventsNotifier.PublishOnUIThread(new EventChangedEvent());
             }
         }
 

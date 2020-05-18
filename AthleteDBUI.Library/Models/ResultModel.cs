@@ -12,7 +12,8 @@ namespace AthleteDBUI.Library.Models
         public int AthleteId { get; set; }
         public int MeetId { get; set; }
         public int EventId { get; set; }
-        public int Mark { get; set; }
+        public float Mark { get; set; }
+        public string Wind { get; set; }
         public DateTime PerfDate { get; set; }
     }
 }

@@ -13,7 +13,8 @@ namespace AthleteDBUI.ViewModels
         IHandle<AddressChangedEvent>, 
         IHandle<CoachChangedEvent>,
         IHandle<SchoolChangedEvent>,
-        IHandle<MeetChangedEvent>
+        IHandle<MeetChangedEvent>,
+        IHandle<EventChangedEvent>
     {
 
         #region PRIVATE BACKING FIELDS
@@ -148,6 +149,11 @@ namespace AthleteDBUI.ViewModels
         }
 
         public void Handle(MeetChangedEvent message)
+        {
+            _resultVM = new ResultViewModel();
+        }
+
+        public void Handle(EventChangedEvent message)
         {
             _resultVM = new ResultViewModel();
         }

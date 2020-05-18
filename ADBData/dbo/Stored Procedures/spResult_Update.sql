@@ -3,7 +3,8 @@
 @AthleteId INT,
 @MeetId INT,
 @EventId INT,
-@Mark INT,
+@Mark FLOAT,
+@Wind NVARCHAR(50),
 @PerfDate DATETIME2
 AS
 BEGIN
@@ -15,6 +16,7 @@ BEGIN
 	MeetId = @MeetId,
 	EventId = @EventId,
 	Mark = @Mark,
+	Wind = @Wind,
 	PerfDate = @PerfDate
 	WHERE Id = @Id;
 END

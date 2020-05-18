@@ -4,11 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AthleteDBUI.Views"
-              mc:Ignorable="d" Background='White' FontSize='12'
+             mc:Ignorable="d" Background='White' FontSize='12'   
+            
              d:DesignHeight="740" d:DesignWidth="900">
-
-    <StackPanel Orientation='Vertical'
+    <ScrollViewer VerticalScrollBarVisibility="auto">
+    <StackPanel Orientation='Vertical'           
+        
 							Style='{StaticResource MainStackPanel}'>
+        
         <Border>
             <StackPanel >
                 <TextBlock Text='Results Page'
@@ -98,54 +101,65 @@
 												 Grid.Row='4'
 												 Grid.Column='1'
 												 Style='{StaticResource LabelText}'/>
-                        <TextBox Text="{Binding Path=Mark, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                                 
+                        <TextBox Text="{Binding Path=MarkDisplay, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                                 
                                  Grid.Row='4'
 								 Grid.Column='2'			 
                                  MinWidth='200'
 											 />
 
                         <!-- Row 5 -->
-                        <TextBlock Text='Date:'
+                        <TextBlock Text='Wind:'
 												 Grid.Row='5'
+												 Grid.Column='1'
+												 Style='{StaticResource LabelText}'/>
+                        <TextBox Text="{Binding Path=Wind, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"                                 
+                                 Grid.Row='5'
+								 Grid.Column='2'			 
+                                 MinWidth='200'
+											 />
+
+                        <!-- Row 6 -->
+                        <TextBlock Text='Date:'
+												 Grid.Row='6'
 												 Grid.Column='1'
 												Style='{StaticResource LabelText}' />
                         <DatePicker x:Name='PerfDate'
 													MinWidth='250'
-													Grid.Row='5'
+													Grid.Row='6'
 													Grid.Column='2'													
 													DisplayDate='{Binding DateTime.Now}'
 													 />
                        
                        
 
-                        <!-- Row 6 -->
+                        <!-- Row 7 -->
                         <StackPanel 
-							Grid.Row='6'  
+							Grid.Row='7'  
 							Grid.Column='1'
 							Grid.ColumnSpan='2'
 							Orientation='Horizontal'>
 
                             <Button x:Name='Clear'
-												Grid.Row='6'
+												Grid.Row='7'
 												Grid.Column='1'
 												Content='Clear'
 												>
                             </Button>
                             <Button x:Name='Update'
-												Grid.Row='6'
+												Grid.Row='7'
 												Grid.Column='2'
 												Content='Update'
 												/>
 
                             <Button x:Name='Add'
-												Grid.Row='6'
+												Grid.Row='7'
 												Grid.Column='3'
 												Content='Add'
 												/>
 
                         </StackPanel>
 
-                        <StackPanel Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2">
+                        <StackPanel Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2">
                         <Border>
                             <StackPanel >
                                 <TextBlock Text='List of Performances'
@@ -164,9 +178,11 @@
                                                           Margin="10 5 10 5"/>
                                                <TextBlock Text='{Binding EventName}' 
                                                           Margin="10 5 10 5"/>
-                                               <TextBlock Text='{Binding Mark}' 
+                                               <TextBlock Text='{Binding MarkDisplay}'                                                           
                                                           Margin="10 5 10 5"/>
-                                               <TextBlock Text='{Binding PerfDate, StringFormat=d}' 
+                                                <TextBlock Text='{Binding Wind}'                                                           
+                                                          Margin="10 5 10 5"/>
+                                                    <TextBlock Text='{Binding PerfDate, StringFormat=d}' 
                                                           Margin="10 5 10 5"/>
                                                
 
@@ -186,9 +202,10 @@
                     <StackPanel Orientation="Horizontal"
 											HorizontalAlignment="Center">
                         <Button Content="Import Results"
-										x:Name="ImportResults" />
-                        <Button Content="Export Results"
+										x:Name="Import" />
+                        <!--<Button Content="Export Results"
 										x:Name="ExportResults" />
+                        -->
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -206,5 +223,7 @@
         </Border>
 
 
+        
     </StackPanel>
+    </ScrollViewer>
 </UserControl>
