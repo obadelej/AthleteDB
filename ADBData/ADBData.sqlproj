@@ -116,6 +116,8 @@
     <Build Include="dbo\Stored Procedures\spResult_Delete.sql" />
     <Build Include="dbo\Stored Procedures\spResult_GetById.sql" />
     <Build Include="dbo\Stored Procedures\spResult_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\spResult_GetAllByAthleteId.sql" />
+    <Build Include="dbo\Stored Procedures\spResult_GetAllProfiles.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="ADBData.refactorlog" />

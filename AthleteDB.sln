@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AthleteDBUI.Library", "Athl
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ADBData", "ADBData\ADBData.sqlproj", "{2CE023FE-7FF5-42C7-B225-B6FC787A1247}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AthleteDB Setup", "AthleteDB Setup\AthleteDB Setup.vdproj", "{3A8F31F0-6878-406B-9B5B-C8ABEFE45AFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,8 @@ Global
 		{2CE023FE-7FF5-42C7-B225-B6FC787A1247}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CE023FE-7FF5-42C7-B225-B6FC787A1247}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2CE023FE-7FF5-42C7-B225-B6FC787A1247}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3A8F31F0-6878-406B-9B5B-C8ABEFE45AFB}.Debug|Any CPU.ActiveCfg = Debug
+		{3A8F31F0-6878-406B-9B5B-C8ABEFE45AFB}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
 ﻿using AthleteDBUI.Enums;
+using AthleteDBUI.EventModels;
 using AthleteDBUI.Library.DataAccess;
 using AthleteDBUI.Library.Models;
 using AthleteDBUI.Models;
@@ -45,18 +46,20 @@ namespace AthleteDBUI.ViewModels
         private CoachDisplayModel _selectedCoach;
         private Gender _selectedGender;
         private string msg;
+        IEventAggregator _events;
 
         #endregion
         #region CONSTRUCTORS
 
-        public AthleteViewModel()
-        {
-            
+        public AthleteViewModel(IEventAggregator events)
+        {            
             Addresses = new BindingList<AddressDisplayModel>(GetAllAddresses());
             Coaches = new BindingList<CoachDisplayModel>(GetAllCoaches());
             Parents = new BindingList<ParentDisplayModel>(GetAllParents());            
             Schools = new BindingList<SchoolDisplayModel>(GetAllSchools());
             Athletes = new BindingList<AthleteDisplayModel>(GetAllAthletes());
+
+            _events = events;
         }
 
         #endregion
@@ -418,6 +421,8 @@ namespace AthleteDBUI.ViewModels
                 Athletes = new BindingList<AthleteDisplayModel>(GetAllAthletes());
                 NotifyOfPropertyChange(() => Athletes);
                 Clear();
+
+                _events.PublishOnUIThread(new AthleteChangedEvent());
             }
             else
             {
@@ -462,6 +467,8 @@ namespace AthleteDBUI.ViewModels
 
 
                     isUpdating = false;
+
+                    _events.PublishOnUIThread(new AthleteChangedEvent());
                 }
 
             }
@@ -493,6 +500,8 @@ namespace AthleteDBUI.ViewModels
                 Athletes = new BindingList<AthleteDisplayModel>(GetAllAthletes());
                 SelectedAthlete = null;
                 Clear();
+
+                _events.PublishOnUIThread(new AthleteChangedEvent());
             }
         }
 

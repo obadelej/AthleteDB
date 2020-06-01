@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AthleteDBUI.Views"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Athlete Database" Height="740" Width="1000">
+        Title="Athlete Database" Height="740" Width="1000" Icon="/AthleteDatabase;component/Images/AthleteDatabase1.ico">
     <DockPanel Background='White'>
         <Menu DockPanel.Dock="Top" FontSize="18">
             <MenuItem Header='File' >
@@ -38,7 +38,12 @@
                       x:Name="ProfileView">
                 
             </MenuItem>
-            
+
+            <MenuItem Header='Print Profile'
+                      x:Name="PrintProfileView">
+
+            </MenuItem>
+
             <MenuItem Header='Help'
 								x:Name='Help'>
                 <MenuItem Header='Content'

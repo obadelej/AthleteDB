@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AthleteDBUI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Athlete Database")]
+[assembly: AssemblyDescription("Athlete Database is an application that is used to keep track of athlete profile information. It can store most of the information about an athlete including their events and times.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AthleteDBUI")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCompany("Software Solutions Inc.")]
+[assembly: AssemblyProduct("Athlete Database")]
+[assembly: AssemblyCopyright("Copyright ©  2020 Software Solutions Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,0 +1,47 @@
+﻿<Window x:Class="WpfReportApplication.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rv="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms" 
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+      <WindowsFormsHost> 
+        <rv:ReportViewer x:Name="_reportViewer"/> 
+      </WindowsFormsHost>
+    </Grid>
+</Window>
+
+public MainWindow()
+{
+    InitializeComponent();
+    _reportViewer.Load += ReportViewer_Load;
+}
+
+
+private bool _isReportViewerLoaded;
+
+private void ReportViewer_Load(object sender, EventArgs e)
+{
+    if (!_isReportViewerLoaded)
+    {
+        Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
+        AdventureWorks2008R2DataSet dataset = new AdventureWorks2008R2DataSet();
+
+        dataset.BeginInit();
+
+        reportDataSource1.Name = "DataSet1"; //Name of the report dataset in our .RDLC file
+        reportDataSource1.Value = dataset.SalesOrderDetail;
+        this._reportViewer.LocalReport.DataSources.Add(reportDataSource1);
+        this._reportViewer.LocalReport.ReportEmbeddedResource = "<VSProjectName>.Report1.rdlc";
+
+        dataset.EndInit();
+
+        //fill data into adventureWorksDataSet
+        AdventureWorks2008R2DataSetTableAdapters.SalesOrderDetailTableAdapter salesOrderDetailTableAdapter = new AdventureWorks2008R2DataSetTableAdapters.SalesOrderDetailTableAdapter();
+        salesOrderDetailTableAdapter.ClearBeforeFill = true;
+        salesOrderDetailTableAdapter.Fill(dataset.SalesOrderDetail);
+
+        _reportViewer.RefreshReport();
+
+        _isReportViewerLoaded = true;
+    }
+}

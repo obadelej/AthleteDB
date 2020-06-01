@@ -1,0 +1,48 @@
+﻿<Window x:Class="WpfApplication55.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication55"
+        xmlns:rv="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <WindowsFormsHost>
+            <rv:ReportViewer x:Name="reportViewer1" />
+        </WindowsFormsHost>
+    </Grid>
+</Window>
+
+
+
+
+
+using System.Collections.Generic;
+using System.Windows;
+
+namespace WpfApplication55
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            reportViewer1.LocalReport.ReportEmbeddedResource = "WpfApplication55.Report1.rdlc";
+
+            Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
+            reportDataSource1.Name = "DataSet1";
+            reportDataSource1.Value = new List<MyReportData>() { new MyReportData() { Field1 = "Value 1", Field2 = "Value 2" } };
+            reportViewer1.LocalReport.DataSources.Add(reportDataSource1);
+            reportViewer1.RefreshReport();
+        }
+    }
+
+    public class MyReportData
+    {
+        public string Field1 { get; set; }
+        public string Field2 { get; set; }
+    }
+}
+RDLC (screenshot) 

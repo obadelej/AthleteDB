@@ -92,7 +92,7 @@
                                    Style='{StaticResource LabelText}'/>
                         <ComboBox ItemsSource="{Binding EventList}"
                                   SelectedItem="{Binding SelectedEvent}"
-                                  DisplayMemberPath="EventName"
+                                  DisplayMemberPath="EventName"                                  
                                   Grid.Row="3"
                                   Grid.Column="2" />
 

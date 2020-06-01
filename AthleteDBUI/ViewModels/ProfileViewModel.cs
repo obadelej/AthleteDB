@@ -1,6 +1,7 @@
 ﻿using AthleteDBUI.Converters;
 using AthleteDBUI.Library.DataAccess;
 using AthleteDBUI.Models;
+using AthleteDBUI.WinForms;
 using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
@@ -26,12 +27,13 @@ namespace AthleteDBUI.ViewModels
         private SchoolDisplayModel _selectedSchool;
         private string _convertedMark;
         private BindingList<ResultDisplayModel> _selectedAthletePBs;
+       
 
         #endregion
 
         #region CONSTRUCTORS
         public ProfileViewModel()
-        {
+        {            
             Athletes = new BindingList<AthleteDisplayModel>(GetAllAthletes());
             Addresses = new BindingList<AddressDisplayModel>(GetAllAddresses());
             Parents = new BindingList<ParentDisplayModel>(GetAllParents());
@@ -44,6 +46,7 @@ namespace AthleteDBUI.ViewModels
 
         #region PUBLIC PROPERTIES
 
+        
         public string EvtName
         {
             get { return _evtName; }
@@ -174,6 +177,11 @@ namespace AthleteDBUI.ViewModels
         #endregion
 
         #region PUBLIC METHODS
+        public void PrintReport()
+        {
+            ProfileForm frm = new ProfileForm();
+            frm.ShowDialog();
+        }
 
         #endregion
 
@@ -239,11 +247,11 @@ namespace AthleteDBUI.ViewModels
             
             SelectedAthletePBs = new BindingList<ResultDisplayModel>(newList.OrderBy(x=>x.EventName).ToList());
             
-            NotifyOfPropertyChange(() => SelectedAthletePBs);
-
-           
+            NotifyOfPropertyChange(() => SelectedAthletePBs);           
         }
 
+
+        
         #endregion
     }
 }

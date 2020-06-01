@@ -1,4 +1,5 @@
-﻿using AthleteDBUI.Library.DataAccess;
+﻿using AthleteDBUI.EventModels;
+using AthleteDBUI.Library.DataAccess;
 using AthleteDBUI.Library.Models;
 using AthleteDBUI.Models;
 using Caliburn.Micro;
@@ -28,6 +29,7 @@ namespace AthleteDBUI.ViewModels
         private int _athleteId;
         private int _meetId;
         private int _eventId;
+        private string _evtName;
         private string msg;
 
         private BindingList<ResultDisplayModel> _results;
@@ -37,7 +39,8 @@ namespace AthleteDBUI.ViewModels
         private AthleteDisplayModel _selectedAthlete;
         private MeetDisplayModel _selectedMeet;
         private EventDisplayModel _selectedEvent;
-        private ResultDisplayModel _selectedResult;           
+        private ResultDisplayModel _selectedResult;
+        //IEventAggregator _events;
 
 
         List<ResultModel> resultsToSave = new List<ResultModel>();
@@ -63,6 +66,8 @@ namespace AthleteDBUI.ViewModels
             Meets = new BindingList<MeetDisplayModel>(GetAllMeets());
             EventList = new BindingList<EventDisplayModel>(GetAllEvents());
 
+            //_events = events;
+
            
         }
 
@@ -70,6 +75,16 @@ namespace AthleteDBUI.ViewModels
         #endregion
 
         #region PUBLIC PROPERTIES
+
+        public string EvtName
+        {
+            get { return _evtName; }
+            set
+            {
+                _evtName = value;
+                NotifyOfPropertyChange(() => EvtName);
+            }
+        }
 
         public AthleteDisplayModel SelectedAthlete
         {
@@ -109,7 +124,7 @@ namespace AthleteDBUI.ViewModels
                 _selectedResult = value;
                 if(value != null)
                 {
-                    MarkDisplay = ConvertFloatToMark(value.Mark, GetEventName());
+                    MarkDisplay = ConvertFloatToMark(value.Mark, GetResultEventName());
                     NotifyOfPropertyChange(() => MarkDisplay);
                 }
                 
@@ -523,7 +538,7 @@ namespace AthleteDBUI.ViewModels
                 //NotifyOfPropertyChange(() => Parents);
                 Clear();
 
-                //_events.PublishOnUIThread(new ParentChangedEvent());
+                //_events.PublishOnUIThread(new ResultChangedEvent());
             
 
             isAdding = false;
@@ -564,7 +579,7 @@ namespace AthleteDBUI.ViewModels
 
             }
 
-            //_events.PublishOnUIThread(new ParentChangedEvent());
+            //_events.PublishOnUIThread(new ResultChangedEvent());
         }
 
         public void Delete()
@@ -579,7 +594,7 @@ namespace AthleteDBUI.ViewModels
                 SelectedResult = null;
                 Clear();
 
-                //_events.PublishOnUIThread(new ParentChangedEvent());
+                //_events.PublishOnUIThread(new ResultChangedEvent());
             }
         }
         #endregion
@@ -658,6 +673,12 @@ namespace AthleteDBUI.ViewModels
         }
 
         private string GetEventName()
+        {
+            string eventName = EventList.Where(x => x.Id == SelectedEvent.Id).FirstOrDefault().EventName;
+            return eventName;
+        }
+
+        private string GetResultEventName()
         {
             string eventName = EventList.Where(x => x.Id == SelectedResult.EventId).FirstOrDefault().EventName;
             return eventName;

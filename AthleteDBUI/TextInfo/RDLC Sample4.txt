@@ -1,0 +1,123 @@
+﻿<Window x:Class="SolRDLCReportWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:RV="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <WindowsFormsHost x:Name="WinFormHost">
+            <RV:ReportViewer x:Name="ReportEmployee"></RV:ReportViewer>
+        </WindowsFormsHost>
+    </Grid>
+</Window>
+
+2. Code Behind
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Data;
+using System.Data.SqlClient;
+using Microsoft.Reporting.WinForms;
+
+
+namespace SolRDLCReportWPF
+{
+    /// 
+
+    /// Interaction logic for MainWindow.xaml
+    /// 
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            try
+            {
+                DisplayReport(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);  
+            }
+        }
+
+        #region Bind Employee Data to DataSet Schema
+        /// 
+
+        /// Get Employee data from Northwind database and bind in NorthwindDataSet
+        /// 
+        /// DataTable
+        private DataTable GetEmployeeData()
+        {
+            try
+            {
+                // Open Sql Connection
+                SqlConnection SqlCon = new SqlConnection(@"Data Source=SHREE\SHREE;Initial Catalog=Northwind;Integrated Security=True");
+                SqlCon.Open();
+
+                // Create a Command
+                SqlCommand SqlComm = new SqlCommand();
+                SqlComm.Connection = SqlCon;
+                SqlComm.CommandType = CommandType.Text;
+                SqlComm.CommandText = "SELECT FirstName,LastName,BirthDate,Address,City,PostalCode,Country FROM Employees";
+
+                // Create instance of Northwind DataSetXSD
+                NorthwindDataSet.EmployeeDataTable EmployeeDt = new NorthwindDataSet.EmployeeDataTable();
+
+                // Set a Data Commands
+                SqlDataAdapter SqlDa = new SqlDataAdapter(SqlComm);
+                SqlDa.Fill(EmployeeDt); // Fill Data in NorthwindDataSet Object.
+
+                return EmployeeDt;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Display Report
+        /// 
+
+        /// Display Report in Report Viewer
+        /// 
+        private void DisplayReport()
+        {
+            try
+            {
+                // Set a DataSource to the report
+
+                // First Parameter - Report DataSet Name
+                // Second Parameter - DataSource Object i.e DataTable
+                ReportEmployee.LocalReport.DataSources.Add(new ReportDataSource("EmployeeDataSet", GetEmployeeData()));
+
+                // Set A Report Embedded Resource
+                ReportEmployee.LocalReport.ReportEmbeddedResource = "SolRDLCReportWPF.NorthwindReport.rdlc";
+                // OR Set Report Path
+                // Alternative: ReportEmployee.LocalReport.ReportPath = @"../../NorthwindReport.rdlc";
+
+                // Display Report
+                ReportEmployee.RefreshReport();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);  
+            }
+        }
+
+        #endregion
+    }
+}

@@ -421,10 +421,17 @@
                 </StackPanel>
                 
             </StackPanel>
+                
         </StackPanel>
         <StackPanel>
-            
-        </StackPanel>
+                <StackPanel>
+                    <Border>
+                        <StackPanel>
+                            <Button x:Name="PrintReport" Content="Print Report"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
     </StackPanel>
     </ScrollViewer>
 </UserControl>

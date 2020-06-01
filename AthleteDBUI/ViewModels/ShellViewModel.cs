@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AthleteDBUI.EventModels;
+using AthleteDBUI.WinForms;
 using Caliburn.Micro;
 
 namespace AthleteDBUI.ViewModels
@@ -14,7 +15,9 @@ namespace AthleteDBUI.ViewModels
         IHandle<CoachChangedEvent>,
         IHandle<SchoolChangedEvent>,
         IHandle<MeetChangedEvent>,
-        IHandle<EventChangedEvent>
+        IHandle<EventChangedEvent>,
+        IHandle<AthleteChangedEvent>
+        //IHandle<ResultChangedEvent>
     {
 
         #region PRIVATE BACKING FIELDS
@@ -28,6 +31,8 @@ namespace AthleteDBUI.ViewModels
         private AthleteViewModel _athleteVM;
         private ResultViewModel _resultVM;
         private ProfileViewModel _profileVM;
+        private AboutViewModel _aboutVM;
+        //private ProfileReportViewModel _profileReportVM;
 
         #endregion
 
@@ -43,8 +48,9 @@ namespace AthleteDBUI.ViewModels
             ParentViewModel parentVM,
             CoachViewModel coachVM,
             ProfileViewModel profileVM,
-            EventViewModel eventVM)
-        
+            EventViewModel eventVM,
+            AboutViewModel aboutVM
+            )        
         {
             _events = events;           
 
@@ -57,9 +63,9 @@ namespace AthleteDBUI.ViewModels
             _athleteVM = athleteVM;
             _resultVM = resultVM;
             _profileVM = profileVM;
+            _aboutVM = aboutVM;           
 
             _events.Subscribe(this);
-
         }
 
         #endregion
@@ -117,9 +123,16 @@ namespace AthleteDBUI.ViewModels
             ActivateItem(_profileVM);
         }
 
+        public void PrintProfileView()
+        {
+            ProfileForm frm = new ProfileForm();
+            frm.ShowDialog();
+            //ActivateItem(_profileReportVM);
+        }
+
         public void AboutView()
         {
-            //ActivateItem(_aboutVM);
+            ActivateItem(_aboutVM);
         }
 
         #endregion
@@ -128,24 +141,24 @@ namespace AthleteDBUI.ViewModels
         #region EVENT HANDLERS
 
         public void Handle(ParentChangedEvent message)
-        {
-            _athleteVM = new AthleteViewModel();
+        {            
+            _athleteVM = new AthleteViewModel(_events);
         }
 
         public void Handle(AddressChangedEvent message)
         {
-            _athleteVM = new AthleteViewModel();
+            _athleteVM = new AthleteViewModel(_events);
         }
 
         public void Handle(CoachChangedEvent message)
         {
-            _athleteVM = new AthleteViewModel();
+            _athleteVM = new AthleteViewModel(_events);
         }
             
 
         public void Handle(SchoolChangedEvent message)
         {
-            _athleteVM = new AthleteViewModel();
+            _athleteVM = new AthleteViewModel(_events);            
         }
 
         public void Handle(MeetChangedEvent message)
@@ -157,6 +170,16 @@ namespace AthleteDBUI.ViewModels
         {
             _resultVM = new ResultViewModel();
         }
+
+        public void Handle(AthleteChangedEvent message)
+        {
+            _resultVM = new ResultViewModel();
+        }
+
+        //public void Handle(ResultChangedEvent message)
+        //{
+        //    _resultVM = new ResultViewModel();
+        //}
 
         #endregion
     }

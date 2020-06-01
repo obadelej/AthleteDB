@@ -1,0 +1,28 @@
+﻿private void initializeReport()
+        {
+            this.mform_components = new System.ComponentModel.Container();
+            Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
+
+            this.ProductBindingSource = new System.Windows.Forms.BindingSource(this.mform_components);
+            ((System.ComponentModel.ISupportInitialize)(this.ProductBindingSource)).BeginInit();
+
+            reportDataSource1.Name = "DataSet4";
+            reportDataSource1.Value = this.ProductBindingSource;
+
+            this.viewerInstance.LocalReport.DataSources.Add(reportDataSource1);
+            this.viewerInstance.LocalReport.ReportEmbeddedResource = "YourReport.rdlc";
+            this.viewerInstance.ZoomPercent = 95;
+            this.windowsFormsHost1.Width = 680;
+
+            ((System.ComponentModel.ISupportInitialize)(this.ProductBindingSource)).EndInit();
+    }
+
+	private System.Windows.Forms.BindingSource ProductBindingSource;
+        private void startReport()
+        {
+            YourClass item  = (YourClass)DataGridView.SelectedItem;
+            this.ProductBindingSource.DataSource = item;
+
+            this.viewerInstance.RefreshReport();
+            this.viewerInstance.Refresh();
+        }
